@@ -6,9 +6,17 @@ OrdererOrgs:
         SANS:
           - localhost
       - Hostname: orderer2
+        SANS:
+          - localhost
       - Hostname: orderer3
+        SANS:
+          - localhost
       - Hostname: orderer4
+        SANS:
+          - localhost
       - Hostname: orderer5
+        SANS:
+          - localhost
 
 PeerOrgs:
   - Name: Supplier
