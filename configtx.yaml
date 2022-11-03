@@ -1,0 +1,238 @@
+Organizations:
+    - &OrdererOrg
+        Name: OrdererOrg
+        ID: OrdererMSP
+        MSPDir: ./organizations/ordererOrganizations/example.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererMSP.admin')"
+
+    - &Supplier
+        Name: SupplierMSP
+        ID: SupplierMSP
+        MSPDir: ./organizations/peerOrganizations/supplier.example.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('SupplierMSP.admin', 'SupplierMSP.client', 'SupplierMSP.peer')"
+            Writers:
+                Type: Signature
+                Rule: "OR('SupplierMSP.admin', 'SupplierMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('SupplierMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('SupplierMSP.peer')"
+        AnchorPeers:
+            - Host: peer0.supplier.example.com
+              Port: 7051
+
+    - &Manufacturer
+        Name: ManufacturerMSP
+        ID: ManufacturerMSP
+        MSPDir: ./organizations/peerOrganizations/manufacturer.example.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('ManufacturerMSP.admin', 'ManufacturerMSP.client', 'ManufacturerMSP.peer')"
+            Writers:
+                Type: Signature
+                Rule: "OR('ManufacturerMSP.admin', 'ManufacturerMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('ManufacturerMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('ManufacturerMSP.peer')"
+        AnchorPeers:
+            - Host: peer0.manufacturer.example.com
+              Port: 8051
+
+    - &Distributor
+        Name: DistributorMSP
+        ID: DistributorMSP
+        MSPDir: ./organizations/peerOrganizations/distributor.example.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('DistributorMSP.admin', 'DistributorMSP.client', 'DistributorMSP.peer')"
+            Writers:
+                Type: Signature
+                Rule: "OR('DistributorMSP.admin', 'DistributorMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('DistributorMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('DistributorMSP.peer')"
+        AnchorPeers:
+            - Host: peer0.distributor.example.com
+              Port: 9051
+
+    - &Retailer
+        Name: RetailerMSP
+        ID: RetailerMSP
+        MSPDir: ./organizations/peerOrganizations/retailer.example.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('RetailerMSP.admin', 'RetailerMSP.client', 'RetailerMSP.peer')"
+            Writers:
+                Type: Signature
+                Rule: "OR('RetailerMSP.admin', 'RetailerMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('RetailerMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('RetailerMSP.peer')"
+        AnchorPeers:
+            - Host: peer0.retailer.example.com
+              Port: 10051
+
+    - &Customer
+        Name: CustomerMSP
+        ID: CustomerMSP
+        MSPDir: ./organizations/peerOrganizations/customer.example.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('CustomerMSP.admin', 'CustomerMSP.client', 'CustomerMSP.peer')"
+            Writers:
+                Type: Signature
+                Rule: "OR('CustomerMSP.admin', 'CustomerMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('CustomerMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('CustomerMSP.peer')"
+        AnchorPeers:
+            - Host: peer0.customer.example.com
+              Port: 11051
+
+Capabilities:
+    Channel: &ChannelCapabilities
+        V2_0: true
+    Orderer: &OrdererCapabilities
+        V2_0: true
+    Application: &ApplicationCapabilities
+        V2_0: true
+
+Application: &ApplicationDefaults
+    Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+    OrdererType: etcdraft
+
+    EtcdRaft:
+        Consenters:
+        - Host: orderer.example.com
+          Port: 7050
+          ClientTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
+          ServerTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
+        - Host: orderer2.example.com
+          Port: 8050
+          ClientTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+          ServerTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+        - Host: orderer3.example.com
+          Port: 9050
+          ClientTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
+          ServerTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
+        - Host: orderer4.example.com
+          Port: 10050
+          ClientTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/server.crt
+          ServerTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/server.crt
+        - Host: orderer5.example.com
+          Port: 11050
+          ClientTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer5.example.com/tls/server.crt
+          ServerTLSCert: organizations/ordererOrganizations/example.com/orderers/orderer5.example.com/tls/server.crt
+    Addresses:
+        - orderer.example.com:7050
+        - orderer2.example.com:8050
+        - orderer3.example.com:9050
+        - orderer4.example.com:10050
+        - orderer5.example.com:11050
+
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+    Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+    Capabilities:
+        <<: *OrdererCapabilities
+
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ChannelCapabilities
+
+Profiles:
+    SupplyChainChannelEtcdRaft:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+            Capabilities:
+                <<: *OrdererCapabilities
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Supplier
+                - *Manufacturer
+                - *Distributor
+                - *Retailer
+                - *Customer
+            Capabilities:
+                <<: *ApplicationCapabilities
+
