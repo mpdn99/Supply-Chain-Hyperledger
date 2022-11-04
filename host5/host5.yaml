@@ -16,7 +16,7 @@ services:
     environment:
       - FABRIC_LOGGING_SPEC=INFO
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
-      - ORDERER_GENERAL_LISTENPORT=9050
+      - ORDERER_GENERAL_LISTENPORT=11050
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       #enabled TLS
@@ -34,7 +34,7 @@ services:
       - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
       - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:9053
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:11053
     working_dir: /root
     command: orderer
     volumes:
@@ -43,8 +43,8 @@ services:
       - ../organizations/ordererOrganizations/example.com/users/Admin@example.com/:/var/hyperledger/orderer/admin
       - orderer5.example.com:/var/hyperledger/production/orderer
     ports:
-      - 9050:9050
-      - 9053:9053
+      - 11050:11050
+      - 11053:11053
     networks:
       - supply-chain
 
@@ -61,12 +61,12 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       - CORE_PEER_ID=peer0.customer.example.com
-      - CORE_PEER_ADDRESS=peer0.customer.example.com:9051
-      - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.customer.example.com:9052
-      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.customer.example.com:9051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.customer.example.com:9051
+      - CORE_PEER_ADDRESS=peer0.customer.example.com:11051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:11051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.customer.example.com:11052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:11052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.customer.example.com:11051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.customer.example.com:11051
       - CORE_PEER_LOCALMSPID=customerMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0customer"}
@@ -79,7 +79,7 @@ services:
       - ../organizations/peerOrganizations/customer.example.com/peers/peer0.customer.example.com/tls:/etc/hyperledger/fabric/tls
       - peer0.customer.example.com:/var/hyperledger/production
     ports:
-      - 9051:9051
+      - 11051:11051
     networks:
       - supply-chain
 
@@ -93,7 +93,7 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - FABRIC_LOGGING_SPEC=INFO
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.customer.example.com:9051
+      - CORE_PEER_ADDRESS=peer0.customer.example.com:11051
       - CORE_PEER_LOCALMSPID=customerMSP
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/customer.example.com/peers/peer0.customer.example.com/tls/server.crt
