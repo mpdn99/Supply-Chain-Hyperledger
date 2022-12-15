@@ -67,7 +67,7 @@ services:
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.distributor.example.com:9051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.distributor.example.com:9051
-      - CORE_PEER_LOCALMSPID=distributorMSP
+      - CORE_PEER_LOCALMSPID=DistributorMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0distributor"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s
@@ -94,7 +94,7 @@ services:
       - FABRIC_LOGGING_SPEC=INFO
       - CORE_PEER_ID=cli
       - CORE_PEER_ADDRESS=peer0.distributor.example.com:9051
-      - CORE_PEER_LOCALMSPID=distributorMSP
+      - CORE_PEER_LOCALMSPID=DistributorMSP
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/distributor.example.com/peers/peer0.distributor.example.com/tls/server.crt
       - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/distributor.example.com/peers/peer0.distributor.example.com/tls/server.key
