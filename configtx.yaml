@@ -14,27 +14,6 @@ Organizations:
                 Type: Signature
                 Rule: "OR('OrdererMSP.admin')"
 
-    - &Supplier
-        Name: SupplierMSP
-        ID: SupplierMSP
-        MSPDir: ./organizations/peerOrganizations/supplier.example.com/msp
-        Policies:
-            Readers:
-                Type: Signature
-                Rule: "OR('SupplierMSP.admin', 'SupplierMSP.client', 'SupplierMSP.peer')"
-            Writers:
-                Type: Signature
-                Rule: "OR('SupplierMSP.admin', 'SupplierMSP.client')"
-            Admins:
-                Type: Signature
-                Rule: "OR('SupplierMSP.admin')"
-            Endorsement:
-                Type: Signature
-                Rule: "OR('SupplierMSP.peer')"
-        AnchorPeers:
-            - Host: peer0.supplier.example.com
-              Port: 7051
-
     - &Manufacturer
         Name: ManufacturerMSP
         ID: ManufacturerMSP
@@ -54,7 +33,7 @@ Organizations:
                 Rule: "OR('ManufacturerMSP.peer')"
         AnchorPeers:
             - Host: peer0.manufacturer.example.com
-              Port: 8051
+              Port: 7051
 
     - &Distributor
         Name: DistributorMSP
@@ -75,7 +54,7 @@ Organizations:
                 Rule: "OR('DistributorMSP.peer')"
         AnchorPeers:
             - Host: peer0.distributor.example.com
-              Port: 9051
+              Port: 8051
 
     - &Retailer
         Name: RetailerMSP
@@ -96,7 +75,7 @@ Organizations:
                 Rule: "OR('RetailerMSP.peer')"
         AnchorPeers:
             - Host: peer0.retailer.example.com
-              Port: 10051
+              Port: 9051
 
     - &Customer
         Name: CustomerMSP
@@ -117,7 +96,7 @@ Organizations:
                 Rule: "OR('CustomerMSP.peer')"
         AnchorPeers:
             - Host: peer0.customer.example.com
-              Port: 11051
+              Port: 10051
 
 Capabilities:
     Channel: &ChannelCapabilities
@@ -228,7 +207,6 @@ Profiles:
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *Supplier
                 - *Manufacturer
                 - *Distributor
                 - *Retailer
