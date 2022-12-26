@@ -2,6 +2,7 @@ version: '3.8'
 
 volumes:
   orderer.example.com:
+  orderer5.example.com:
   peer0.manufacturer.example.com:
 
 networks:
@@ -48,7 +49,7 @@ services:
     networks:
       - supply-chain
 
-    orderer5.example.com:
+  orderer5.example.com:
     container_name: orderer5.example.com
     image: hyperledger/fabric-orderer:latest
     environment:
@@ -142,6 +143,7 @@ services:
     command: /bin/bash
     volumes:
         - /var/run/:/host/var/run/
+        - ../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode
         - ../organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto
         - ../channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
