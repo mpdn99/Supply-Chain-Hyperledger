@@ -168,7 +168,7 @@ func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID
 	return nil
 }
 
-func (t *Supplychain) createUser(ctx contractapi.TransactionContextInterface, name string, userID string, organization string, email string, address string, password string) error {
+func (t *Supplychain) createUser(ctx contractapi.TransactionContextInterface, name string, userID string, email string, address string, password string) error {
 	user := User{
 		Name:         name,
 		User_ID:      userID,
