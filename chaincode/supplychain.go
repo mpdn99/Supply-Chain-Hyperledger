@@ -138,7 +138,7 @@ func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) er
 	if err != nil {
 		return err
 	}
-	err = ctx.GetStub().PutState(userRetailer.User_ID, UserRetailerJSON)
+	err = ctx.GetStub().PutState(userRetailer.User_ID, userRetailerJSON)
 	if err != nil {
 		return fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
