@@ -52,26 +52,26 @@ type Product struct {
 }
 
 func getCounter(ctx contractapi.TransactionContextInterface, AssetType string) int {
-	counterAsBytes, _ := ctx.GetStub().GetState(AssetType)
-	counterAsset := CounterNO{}
+	counterJSON, _ := ctx.GetStub().GetState(Type)
+	counter := CounterNO{}
 
-	json.Unmarshal(counterAsBytes, &counterAsset)
-	return counterAsset.Counter
+	json.Unmarshal(counterJSON, &counter)
+	return counter.Counter
 }
 
 func incrementCounter(ctx contractapi.TransactionContextInterface, AssetType string) int {
-	counterAsBytes, _ := ctx.GetStub().GetState(AssetType)
-	counterAsset := CounterNO{}
+	counterJSON, _ := ctx.GetStub().GetState(AssetType)
+	counter := CounterNO{}
 
-	json.Unmarshal(counterAsBytes, &counterAsset)
-	counterAsset.Counter++
-	counterAsBytes, _ = json.Marshal(counterAsset)
+	json.Unmarshal(counterJSON, &counter)
+	counter.Counter++
+	counterJSON, _ = json.Marshal(counter)
 
-	err := ctx.GetStub().PutState(AssetType, counterAsBytes)
+	err := ctx.GetStub().PutState(Type, counterJSON)
 	if err != nil {
 		fmt.Sprintf("Failed to Increment Counter")
 	}
-	return counterAsset.Counter
+	return counter.Counter
 }
 
 func (t *Supplychain) GetTxTimestampChannel(ctx contractapi.TransactionContextInterface) (string, error) {
@@ -87,7 +87,7 @@ func (t *Supplychain) GetTxTimestampChannel(ctx contractapi.TransactionContextIn
 func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) error {
 
 	//Init Manufacturer Admin Account
-	entityUserManufacturer := User{
+	userManufacturer := User{
 		Name:         "Manufacturer Admin",
 		User_ID:      "manufacturer-admin",
 		UserType:     "admin",
@@ -95,14 +95,19 @@ func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) er
 		Address:      "Hanoi",
 		Password:     "admin@123",
 	}
-	entityUserAsBytesManufacturer, _ := json.Marshal(entityUserManufacturer)
-	errManufacturer := ctx.GetStub().PutState(entityUserManufacturer.User_ID, entityUserAsBytesManufacturer)
-	if errManufacturer != nil {
-		return errManufacturer
+
+	userJSONManufacturer, err := json.Marshal(userManufacturer)
+	if err != nil {
+		return err
+	}
+
+	err := ctx.GetStub().PutState(userManufacturer.User_ID, userManufacturerJSON)
+	if err != nil {
+		return fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
 
 	//Init Distributor Admin Account
-	entityUserDistributor := User{
+	userDistributor := User{
 		Name:         "Distributor Admin",
 		User_ID:      "distributor-admin",
 		UserType:     "admin",
@@ -110,14 +115,18 @@ func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) er
 		Address:      "Hanoi",
 		Password:     "admin@123",
 	}
-	entityUserAsBytesDistributor, _ := json.Marshal(entityUserDistributor)
-	errDistributor := ctx.GetStub().PutState(entityUserDistributor.User_ID, entityUserAsBytesDistributor)
-	if errDistributor != nil {
-		return errDistributor
+	userDistributorJSON, err := json.Marshal(userDistributor)
+	if err != nil {
+		return err
+	}
+
+	err := ctx.GetStub().PutState(userDistributor.User_ID, userDistributorJSON)
+	if err != nil {
+		return fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
 
 	//Init Retailer Admin Account
-	entityUserRetailer := User{
+	userRetailer := User{
 		Name:         "Retailer Admin",
 		User_ID:      "retailer-admin",
 		UserType:     "admin",
@@ -125,32 +134,42 @@ func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) er
 		Address:      "Hanoi",
 		Password:     "admin@123",
 	}
-	entityUserAsBytesRetailer, _ := json.Marshal(entityUserRetailer)
-	errRetailer := ctx.GetStub().PutState(entityUserRetailer.User_ID, entityUserAsBytesRetailer)
-	if errRetailer != nil {
-		return errRetailer
+	userJSONRetailer, err := json.Marshal(userRetailer)
+	if err != nil {
+		return err
+	}
+	err := ctx.GetStub().PutState(userRetailer.User_ID, UserRetailerJSON)
+	if err != nil {
+		return fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
 
 	return nil
 }
 
 func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID string, password string) error {
-	entityUserBytes, _ := ctx.GetStub().GetState(userID)
-	if entityUserBytes == nil {
+	userJSON, err := ctx.GetStub().GetState(userID)
+	if err != nil {
+		return fmt.Errorf("Failed to read from world state. %s", err.Error())
+	}
+	if userJSON == nil {
 		return fmt.Errorf("Cannot find User %s", userID)
 	}
-	entityUser := User{}
 
-	json.Unmarshal(entityUserBytes, &entityUser)
-
-	if entityUser.Password != password {
-		return fmt.Errorf("Password is wrong")
+	user := User{}
+	err = json.Unmarshal(userJSON, &user)
+	if err != nil {
+		return nil
 	}
+
+	if user.Password != password {
+		return fmt.Errorf("Incorrect password")
+	}
+
 	return nil
 }
 
 func (t *Supplychain) createUser(ctx contractapi.TransactionContextInterface, name string, userID string, organization string, email string, address string, password string) error {
-	entityUser := User{
+	user := User{
 		Name:         name,
 		User_ID:      userID,
 		UserType:     "client",
@@ -158,11 +177,12 @@ func (t *Supplychain) createUser(ctx contractapi.TransactionContextInterface, na
 		Email:        email,
 		Password:     password,
 	}
-	entityUserAsBytes, _ := json.Marshal(entityUser)
+	userJSON, err := json.Marshal(user)
+	if err != nil {
+		return err
+	}
 
-	ctx.GetStub().PutState(entityUser.User_ID, entityUserAsBytes)
-
-	return nil
+	return ctx.GetStub().PutState(user.User_ID, userJSON)
 }
 
 func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface, userID string, productID string, name string, manufacturerID string, location Location, price string) error {
@@ -176,16 +196,16 @@ func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface,
 	}
 
 	//Add product
-	priceAsFloat, errPrice := strconv.ParseFloat(price, 64)
-	if errPrice != nil {
-		return fmt.Errorf("Failed to convert price: %s", errPrice.Error())
+	priceAsFloat, err := strconv.ParseFloat(price, 64)
+	if err != nil {
+		return fmt.Errorf("Failed to convert price: %s", err.Error())
 	}
 
 	productCounter := getCounter(ctx, "ProductCounterNO")
 	productCounter++
 
-	txTimeAsPtr, errTx := t.GetTxTimestampChannel(ctx)
-	if errTx != nil {
+	txTimeAsPtr, err := t.GetTxTimestampChannel(ctx)
+	if err != nil {
 		return fmt.Errorf("Error in Transaction Timestamp")
 	}
 	postion := ProductPosition{}
@@ -193,7 +213,7 @@ func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface,
 	postion.ProductLocation = location
 	postion.Organization = "Manufacturer"
 
-	entityProduct := Product{
+	product := Product{
 		Product_ID:      "Product" + strconv.Itoa(productCounter),
 		Name:            name,
 		Manufacturer_ID: manufacturerID,
@@ -204,8 +224,14 @@ func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface,
 		Positions:       []ProductPosition{postion},
 		Price:           priceAsFloat,
 	}
-	entityProductAsBytes, _ := json.Marshal(entityProduct)
-	ctx.GetStub().PutState(entityProduct.Product_ID, entityProductAsBytes)
+	productJSON, err := json.Marshal(product)
+	if err != nil {
+		return err
+	}
+	err = ctx.GetStub().PutState(product.Product_ID, productJSON)
+	if err != nil {
+		return fmt.Errorf("Failed to put to world state. %s", err.Error())
+	}
 	incrementCounter(ctx, "ProductCounterNO")
 
 	return nil
@@ -221,28 +247,34 @@ func (t *Supplychain) updateProduct(ctx contractapi.TransactionContextInterface,
 		return fmt.Errorf("User must be Manufacturer")
 	}
 
-	entityProductAsBytes, _ := ctx.GetStub().GetState(productID)
-	if entityProductAsBytes == nil {
+	productJSON, err := ctx.GetStub().GetState(productID)
+	if err != nil {
+		return fmt.Errorf("Failed to read from world state. %s", err.Error())
+	}
+	if productJSON == nil {
 		fmt.Errorf("Cannot find product %s", productID)
 	}
 
-	entityProduct := Product{}
-	json.Unmarshal(entityProductAsBytes, &entityProduct)
+	product := Product{}
+	json.Unmarshal(productJSON, &product)
 
-	if entityProduct.Distributor_ID != "" {
+	if product.Distributor_ID != "" {
 		return fmt.Errorf("Product has sent to Distributor. Cannot update")
 	}
 
 	//Update product
-	priceAsFloat, errPrice := strconv.ParseFloat(price, 64)
-	if errPrice != nil {
-		return fmt.Errorf("Failed to convert price: %s", errPrice.Error())
+	priceAsFloat, err := strconv.ParseFloat(price, 64)
+	if err != nil {
+		return fmt.Errorf("Failed to convert price: %s", err.Error())
 	}
-	entityProduct.Name = name
-	entityProduct.Price = priceAsFloat
+	product.Name = name
+	product.Price = priceAsFloat
 
-	updatedProductAsBytes, _ := json.Marshal(entityProduct)
-	ctx.GetStub().PutState(entityProduct.Product_ID, updatedProductAsBytes)
+	updatedProductJSON, err := json.Marshal(product)
+	if err != nil {
+		return err
+	}
+	ctx.GetStub().PutState(product.Product_ID, updatedProductJSON)
 
 	return nil
 }
@@ -257,29 +289,35 @@ func (t *Supplychain) sentToDistributor(ctx contractapi.TransactionContextInterf
 		return fmt.Errorf("User must be Distributor")
 	}
 
-	entityProductAsBytes, _ := ctx.GetStub().GetState(productID)
-	if entityProductAsBytes == nil {
+	productJSON, err := ctx.GetStub().GetState(productID)
+	if err != nil {
+		return fmt.Errorf("Failed to read from world state. %s", err.Error())
+	}
+	if productJSON == nil {
 		fmt.Errorf("Cannot find product %s", productID)
 	}
 
-	entityProduct := Product{}
-	json.Unmarshal(entityProductAsBytes, &entityProduct)
+	product := Product{}
+	json.Unmarshal(productJSON, &product)
 
-	if entityProduct.Retailer_ID != "" {
+	if product.Retailer_ID != "" {
 		return fmt.Errorf("Product has sent to Retailer. Cannot update")
 	}
 
 	//Update product
-	txTimeAsPtr, errTx := t.GetTxTimestampChannel(ctx)
-	if errTx != nil {
+	txTimeAsPtr, err := t.GetTxTimestampChannel(ctx)
+	if err != nil {
 		return fmt.Errorf("Error in Transaction Timestamp")
 	}
 
-	entityProduct.Distributor_ID = distributorID
-	entityProduct.Positions = append(entityProduct.Positions, ProductPosition{Date: txTimeAsPtr, ProductLocation: location, Organization: "Distributor"})
+	product.Distributor_ID = distributorID
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, ProductLocation: location, Organization: "Distributor"})
 
-	updatedProductAsBytes, _ := json.Marshal(entityProduct)
-	ctx.GetStub().PutState(entityProduct.Product_ID, updatedProductAsBytes)
+	updatedProductJSON, err := json.Marshal(product)
+	if err != nil {
+		return err
+	}
+	ctx.GetStub().PutState(product.Product_ID, updatedProductJSON)
 
 	return nil
 }
@@ -293,29 +331,35 @@ func (t *Supplychain) sentToRetailer(ctx contractapi.TransactionContextInterface
 	if id == "RetailerMSP" {
 		return fmt.Errorf("User must be Retailer")
 	}
-	entityProductAsBytes, _ := ctx.GetStub().GetState(productID)
-	if entityProductAsBytes == nil {
+	productJSON, err := ctx.GetStub().GetState(productID)
+	if err != nil {
+		return fmt.Errorf("Failed to read from world state. %s", err.Error())
+	}
+	if productJSON == nil {
 		fmt.Errorf("Cannot find product %s", productID)
 	}
 
-	entityProduct := Product{}
-	json.Unmarshal(entityProductAsBytes, &entityProduct)
+	product := Product{}
+	json.Unmarshal(productJSON, &product)
 
-	if entityProduct.Consumer_ID != "" {
+	if product.Consumer_ID != "" {
 		return fmt.Errorf("Product has sent to Consumer. Cannot update")
 	}
 
 	//Update product
-	txTimeAsPtr, errTx := t.GetTxTimestampChannel(ctx)
-	if errTx != nil {
+	txTimeAsPtr, err := t.GetTxTimestampChannel(ctx)
+	if err != nil {
 		return fmt.Errorf("Error in Transaction Timestamp")
 	}
 
-	entityProduct.Retailer_ID = retailerID
-	entityProduct.Positions = append(entityProduct.Positions, ProductPosition{Date: txTimeAsPtr, ProductLocation: location, Organization: "Retailer"})
+	product.Retailer_ID = retailerID
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, ProductLocation: location, Organization: "Retailer"})
 
-	updatedProductAsBytes, _ := json.Marshal(entityProduct)
-	ctx.GetStub().PutState(entityProduct.Product_ID, updatedProductAsBytes)
+	updatedProductJSON, err := json.Marshal(product)
+	if err != nil {
+		return err
+	}
+	ctx.GetStub().PutState(product.Product_ID, updatedProductJSON)
 
 	return nil
 }
@@ -331,42 +375,51 @@ func (t *Supplychain) sellToConsumer(ctx contractapi.TransactionContextInterface
 	}
 
 	//Update product
-	entityProductAsBytes, _ := ctx.GetStub().GetState(productID)
-	if entityProductAsBytes == nil {
+	productJSON, err := ctx.GetStub().GetState(productID)
+	if err != nil {
+		return fmt.Errorf("Failed to read from world state. %s", err.Error())
+	}
+	if productJSON == nil {
 		fmt.Errorf("Cannot find product %s", productID)
 	}
 
-	entityProduct := Product{}
-	json.Unmarshal(entityProductAsBytes, &entityProduct)
+	product := Product{}
+	json.Unmarshal(productJSON, &product)
 
-	txTimeAsPtr, errTx := t.GetTxTimestampChannel(ctx)
-	if errTx != nil {
+	txTimeAsPtr, err := t.GetTxTimestampChannel(ctx)
+	if err != nil {
 		return fmt.Errorf("Error in Transaction Timestamp")
 	}
 
-	entityProduct.Consumer_ID = consumerID
-	entityProduct.Positions = append(entityProduct.Positions, ProductPosition{Date: txTimeAsPtr, ProductLocation: location, Organization: "Consumer"})
-	entityProduct.Status = "Sold"
+	product.Consumer_ID = consumerID
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, ProductLocation: location, Organization: "Consumer"})
+	product.Status = "Sold"
 
-	updatedProductAsBytes, _ := json.Marshal(entityProduct)
-	ctx.GetStub().PutState(entityProduct.Product_ID, updatedProductAsBytes)
+	updatedProductJSON, err := json.Marshal(product)
+	if err != nil {
+		return err
+	}
+	ctx.GetStub().PutState(product.Product_ID, updatedProductJSON)
 
 	return nil
 }
 
 func (t *Supplychain) QueryProduct(ctx contractapi.TransactionContextInterface, productID string) (*Product, error) {
-	entityProductAsBytes, err := ctx.GetStub().GetState(productID)
+	productJSON, err := ctx.GetStub().GetState(productID)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
 	}
 
-	if entityProductAsBytes == nil {
+	if productJSON == nil {
 		return nil, fmt.Errorf("%s does not exist", productID)
 	}
 
-	entityProduct := new(Product)
-	_ = json.Unmarshal(entityProductAsBytes, entityProduct)
-	return entityProduct, nil
+	product := new(Product)
+	err = json.Unmarshal(productJSON, product)
+	if err != nil {
+		return nil, err
+	}
+	return product, nil
 }
 
 func (t *Supplychain) QueryAllProducts(ctx contractapi.TransactionContextInterface) ([]*Product, error) {
@@ -386,9 +439,9 @@ func (t *Supplychain) QueryAllProducts(ctx contractapi.TransactionContextInterfa
 			return nil, err
 		}
 
-		entityProduct := new(Product)
-		_ = json.Unmarshal(queryResponse.Value, entityProduct)
-		results = append(results, entityProduct)
+		product := new(Product)
+		_ = json.Unmarshal(queryResponse.Value, product)
+		results = append(results, product)
 	}
 
 	return results, nil
