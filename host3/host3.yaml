@@ -104,6 +104,7 @@ services:
     command: /bin/bash
     volumes:
         - /var/run/:/host/var/run/
+        - ../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode
         - ../organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto
         - ../channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
