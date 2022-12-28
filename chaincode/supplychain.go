@@ -52,7 +52,7 @@ type Product struct {
 }
 
 func getCounter(ctx contractapi.TransactionContextInterface, AssetType string) int {
-	counterJSON, _ := ctx.GetStub().GetState(Type)
+	counterJSON, _ := ctx.GetStub().GetState(AssetType)
 	counter := CounterNO{}
 
 	json.Unmarshal(counterJSON, &counter)
@@ -67,7 +67,7 @@ func incrementCounter(ctx contractapi.TransactionContextInterface, AssetType str
 	counter.Counter++
 	counterJSON, _ = json.Marshal(counter)
 
-	err := ctx.GetStub().PutState(Type, counterJSON)
+	err := ctx.GetStub().PutState(AssetType, counterJSON)
 	if err != nil {
 		fmt.Sprintf("Failed to Increment Counter")
 	}
@@ -96,12 +96,12 @@ func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) er
 		Password:     "admin@123",
 	}
 
-	userJSONManufacturer, err := json.Marshal(userManufacturer)
+	userManufacturerJSON, err := json.Marshal(userManufacturer)
 	if err != nil {
 		return err
 	}
 
-	err := ctx.GetStub().PutState(userManufacturer.User_ID, userManufacturerJSON)
+	err = ctx.GetStub().PutState(userManufacturer.User_ID, userManufacturerJSON)
 	if err != nil {
 		return fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
@@ -120,7 +120,7 @@ func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) er
 		return err
 	}
 
-	err := ctx.GetStub().PutState(userDistributor.User_ID, userDistributorJSON)
+	err = ctx.GetStub().PutState(userDistributor.User_ID, userDistributorJSON)
 	if err != nil {
 		return fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
@@ -134,11 +134,11 @@ func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) er
 		Address:      "Hanoi",
 		Password:     "admin@123",
 	}
-	userJSONRetailer, err := json.Marshal(userRetailer)
+	userRetailerJSON, err := json.Marshal(userRetailer)
 	if err != nil {
 		return err
 	}
-	err := ctx.GetStub().PutState(userRetailer.User_ID, UserRetailerJSON)
+	err = ctx.GetStub().PutState(userRetailer.User_ID, UserRetailerJSON)
 	if err != nil {
 		return fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
