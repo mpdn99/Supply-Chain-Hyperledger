@@ -168,13 +168,14 @@ func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID
 	return nil
 }
 
-func (t *Supplychain) createUser(ctx contractapi.TransactionContextInterface, name string, userID string, email string, address string, password string) error {
+func (t *Supplychain) CreateUser(ctx contractapi.TransactionContextInterface, name string, userID string, email string, address string, password string) error {
 	user := User{
 		Name:         name,
 		User_ID:      userID,
 		UserType:     "client",
 		Organization: "customer",
 		Email:        email,
+		Address:      address,
 		Password:     password,
 	}
 	userJSON, err := json.Marshal(user)
@@ -185,7 +186,7 @@ func (t *Supplychain) createUser(ctx contractapi.TransactionContextInterface, na
 	return ctx.GetStub().PutState(user.User_ID, userJSON)
 }
 
-func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface, userID string, productID string, name string, manufacturerID string, location Location, price string) error {
+func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface, productID string, name string, manufacturerID string, location Location, price string) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
@@ -237,7 +238,7 @@ func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface,
 	return nil
 }
 
-func (t *Supplychain) updateProduct(ctx contractapi.TransactionContextInterface, userID string, productID string, name string, price string) error {
+func (t *Supplychain) UpdateProduct(ctx contractapi.TransactionContextInterface, userID string, productID string, name string, price string) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
@@ -279,7 +280,7 @@ func (t *Supplychain) updateProduct(ctx contractapi.TransactionContextInterface,
 	return nil
 }
 
-func (t *Supplychain) sentToDistributor(ctx contractapi.TransactionContextInterface, productID string, distributorID string, location Location) error {
+func (t *Supplychain) SentToDistributor(ctx contractapi.TransactionContextInterface, productID string, distributorID string, location Location) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
@@ -322,7 +323,7 @@ func (t *Supplychain) sentToDistributor(ctx contractapi.TransactionContextInterf
 	return nil
 }
 
-func (t *Supplychain) sentToRetailer(ctx contractapi.TransactionContextInterface, productID string, retailerID string, location Location) error {
+func (t *Supplychain) SentToRetailer(ctx contractapi.TransactionContextInterface, productID string, retailerID string, location Location) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
@@ -364,7 +365,7 @@ func (t *Supplychain) sentToRetailer(ctx contractapi.TransactionContextInterface
 	return nil
 }
 
-func (t *Supplychain) sellToConsumer(ctx contractapi.TransactionContextInterface, productID string, consumerID string, location Location) error {
+func (t *Supplychain) SellToConsumer(ctx contractapi.TransactionContextInterface, productID string, consumerID string, location Location) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
