@@ -118,6 +118,12 @@ Application: &ApplicationDefaults
         Admins:
             Type: ImplicitMeta
             Rule: "MAJORITY Admins"
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
     Capabilities:
         <<: *ApplicationCapabilities
 
@@ -172,9 +178,6 @@ Orderer: &OrdererDefaults
         BlockValidation:
             Type: ImplicitMeta
             Rule: "ANY Writers"
-        LifecycleEndorsement:
-            Type: ImplicitMeta
-            Rule: "MAJORITY Endorsement"
     Capabilities:
         <<: *OrdererCapabilities
 
