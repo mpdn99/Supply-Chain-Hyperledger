@@ -27,6 +27,11 @@ const (
 	chaincodeName = "supplychain"
 )
 
+type Location struct {
+	Longtitude string `json:"Longtitude"`
+	Latitude   string `json:"Latitude"`
+}
+
 func main(){
 	log.Println("Starting application...")
 	newGrpcConnection()
@@ -163,7 +168,7 @@ func initLedger(contract *client.Contract){
 }
 
 func signIn(contract *client.Contract){
-	result, err := contract.SubmitTransaction("SignIn")
+	result, err := contract.SubmitTransaction("SignIn", "manufacturer-admin", "admin@123")
 	if err != nil {
 		panic(err)
 	}
@@ -171,7 +176,7 @@ func signIn(contract *client.Contract){
 }
 
 func createUser(contract *client.Contract){
-	result, err := contract.SubmitTransaction("CreateUser")
+	result, err := contract.SubmitTransaction("CreateUser", "ducnghia", "ducnghia", "mpdn99@gmail.com", "Hanoi", "123")
 	if err != nil {
 		panic(err)
 	}
@@ -179,7 +184,8 @@ func createUser(contract *client.Contract){
 }
 
 func createProduct(contract *client.Contract){
-	result, err := contract.SubmitTransaction("CreateProduct")
+	location := Location{"123", "456"}
+	result, err := contract.SubmitTransaction("CreateProduct", "", "Bia Saigon", "Sabeco", location, "12000")
 	if err != nil {
 		panic(err)
 	}

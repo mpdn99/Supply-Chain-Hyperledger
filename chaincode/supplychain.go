@@ -28,15 +28,11 @@ type User struct {
 	Password     string `json:"Password"`
 }
 
-type Location struct {
-	Longtitude float64 `json:"Longtitude"`
-	Latitude   float64 `json:"Latitude"`
-}
-
 type ProductPosition struct {
 	Date            string   `json:"Date"`
-	ProductLocation Location `json:"Location"`
 	Organization    string   `json:"Organization"`
+	Longtitude string `json:"Longtitude"`
+	Latitude   string `json:"Latitude"`
 }
 
 type Product struct {
@@ -186,7 +182,7 @@ func (t *Supplychain) CreateUser(ctx contractapi.TransactionContextInterface, na
 	return ctx.GetStub().PutState(user.User_ID, userJSON)
 }
 
-func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface, productID string, name string, manufacturerID string, location Location, price string) error {
+func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface, name string, manufacturerID string, longtitude string, latitude string, price string) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
@@ -211,7 +207,8 @@ func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface,
 	}
 	postion := ProductPosition{}
 	postion.Date = txTimeAsPtr
-	postion.ProductLocation = location
+	postion.Longtitude = longtitude
+	postion.Latitude = latitude
 	postion.Organization = "Manufacturer"
 
 	product := Product{
@@ -280,7 +277,7 @@ func (t *Supplychain) UpdateProduct(ctx contractapi.TransactionContextInterface,
 	return nil
 }
 
-func (t *Supplychain) SentToDistributor(ctx contractapi.TransactionContextInterface, productID string, distributorID string, location Location) error {
+func (t *Supplychain) SentToDistributor(ctx contractapi.TransactionContextInterface, productID string, distributorID string, longtitude string, latitude string) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
@@ -312,7 +309,7 @@ func (t *Supplychain) SentToDistributor(ctx contractapi.TransactionContextInterf
 	}
 
 	product.Distributor_ID = distributorID
-	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, ProductLocation: location, Organization: "Distributor"})
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude , Organization: "Distributor"})
 
 	updatedProductJSON, err := json.Marshal(product)
 	if err != nil {
@@ -323,7 +320,7 @@ func (t *Supplychain) SentToDistributor(ctx contractapi.TransactionContextInterf
 	return nil
 }
 
-func (t *Supplychain) SentToRetailer(ctx contractapi.TransactionContextInterface, productID string, retailerID string, location Location) error {
+func (t *Supplychain) SentToRetailer(ctx contractapi.TransactionContextInterface, productID string, retailerID string, longtitude string, latitude string) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
@@ -354,7 +351,7 @@ func (t *Supplychain) SentToRetailer(ctx contractapi.TransactionContextInterface
 	}
 
 	product.Retailer_ID = retailerID
-	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, ProductLocation: location, Organization: "Retailer"})
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude, Organization: "Retailer"})
 
 	updatedProductJSON, err := json.Marshal(product)
 	if err != nil {
@@ -365,7 +362,7 @@ func (t *Supplychain) SentToRetailer(ctx contractapi.TransactionContextInterface
 	return nil
 }
 
-func (t *Supplychain) SellToConsumer(ctx contractapi.TransactionContextInterface, productID string, consumerID string, location Location) error {
+func (t *Supplychain) SellToConsumer(ctx contractapi.TransactionContextInterface, productID string, consumerID string, longtitude string, latitude string) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
@@ -393,7 +390,7 @@ func (t *Supplychain) SellToConsumer(ctx contractapi.TransactionContextInterface
 	}
 
 	product.Consumer_ID = consumerID
-	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, ProductLocation: location, Organization: "Consumer"})
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude, Organization: "Consumer"})
 	product.Status = "Sold"
 
 	updatedProductJSON, err := json.Marshal(product)
