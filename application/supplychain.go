@@ -27,11 +27,6 @@ const (
 	chaincodeName = "supplychain"
 )
 
-type Location struct {
-	Longtitude string `json:"Longtitude"`
-	Latitude   string `json:"Latitude"`
-}
-
 func main(){
 	log.Println("Starting application...")
 	newGrpcConnection()
@@ -63,9 +58,6 @@ func main(){
 
 	fmt.Println("signIn:")
 	signIn(contract)
-
-	fmt.Println("createUser:")
-	createUser(contract)
 
 	fmt.Println("createProduct:")
 	createProduct(contract)
@@ -175,17 +167,8 @@ func signIn(contract *client.Contract){
 	fmt.Println(string(result))
 }
 
-func createUser(contract *client.Contract){
-	result, err := contract.SubmitTransaction("CreateUser", "ducnghia", "ducnghia", "mpdn99@gmail.com", "Hanoi", "123")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(result))
-}
-
 func createProduct(contract *client.Contract){
-	location := Location{"123", "456"}
-	result, err := contract.SubmitTransaction("CreateProduct", "", "Bia Saigon", "Sabeco", location, "12000")
+	result, err := contract.SubmitTransaction("CreateProduct", "Bia Saigon", "Sabeco", "121", "122", "12000")
 	if err != nil {
 		panic(err)
 	}
@@ -193,7 +176,7 @@ func createProduct(contract *client.Contract){
 }
 
 func updateProduct(contract *client.Contract){
-	result, err := contract.SubmitTransaction("UpdateProduct")
+	result, err := contract.SubmitTransaction("UpdateProduct", "Product1", "Bia 333", "12000")
 	if err != nil {
 		panic(err)
 	}
@@ -201,7 +184,7 @@ func updateProduct(contract *client.Contract){
 }
 
 func sentToDistributor(contract *client.Contract){
-	result, err := contract.SubmitTransaction("SentToDistributor")
+	result, err := contract.SubmitTransaction("SentToDistributor", "Product1", "Shoppe", "125", "125")
 	if err != nil {
 		panic(err)
 	}
@@ -209,7 +192,7 @@ func sentToDistributor(contract *client.Contract){
 }
 
 func sentToRetailer(contract *client.Contract){
-	result, err := contract.SubmitTransaction("SentToRetailer")
+	result, err := contract.SubmitTransaction("SentToRetailer", "Product1", "CircleK", "128", "128")
 	if err != nil {
 		panic(err)
 	}
@@ -217,7 +200,7 @@ func sentToRetailer(contract *client.Contract){
 }
 
 func sellToConsumer(contract *client.Contract){
-	result, err := contract.SubmitTransaction("SellToConsumer")
+	result, err := contract.SubmitTransaction("SellToConsumer", "Product1", "0971026710", "130", "130")
 	if err != nil {
 		panic(err)
 	}
@@ -225,7 +208,7 @@ func sellToConsumer(contract *client.Contract){
 }
 
 func queryProduct(contract *client.Contract){
-	result, err := contract.EvaluateTransaction("QueryProduct")
+	result, err := contract.EvaluateTransaction("QueryProduct", "Product1")
 	if err != nil {
 		panic(err)
 	}

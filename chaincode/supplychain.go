@@ -164,24 +164,6 @@ func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID
 	return nil
 }
 
-func (t *Supplychain) CreateUser(ctx contractapi.TransactionContextInterface, name string, userID string, email string, address string, password string) error {
-	user := User{
-		Name:         name,
-		User_ID:      userID,
-		UserType:     "client",
-		Organization: "customer",
-		Email:        email,
-		Address:      address,
-		Password:     password,
-	}
-	userJSON, err := json.Marshal(user)
-	if err != nil {
-		return err
-	}
-
-	return ctx.GetStub().PutState(user.User_ID, userJSON)
-}
-
 func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface, name string, manufacturerID string, longtitude string, latitude string, price string) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
@@ -235,7 +217,7 @@ func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface,
 	return nil
 }
 
-func (t *Supplychain) UpdateProduct(ctx contractapi.TransactionContextInterface, userID string, productID string, name string, price string) error {
+func (t *Supplychain) UpdateProduct(ctx contractapi.TransactionContextInterface, productID string, name string, price string) error {
 	//Authentication
 	id, err := cid.GetMSPID(ctx.GetStub())
 	if err != nil {
@@ -283,7 +265,7 @@ func (t *Supplychain) SentToDistributor(ctx contractapi.TransactionContextInterf
 	if err != nil {
 		return err
 	}
-	if id == "DistributorMSP" {
+	if id != "DistributorMSP" {
 		return fmt.Errorf("User must be Distributor")
 	}
 
@@ -326,7 +308,7 @@ func (t *Supplychain) SentToRetailer(ctx contractapi.TransactionContextInterface
 	if err != nil {
 		return err
 	}
-	if id == "RetailerMSP" {
+	if id != "RetailerMSP" {
 		return fmt.Errorf("User must be Retailer")
 	}
 	productJSON, err := ctx.GetStub().GetState(productID)
@@ -368,7 +350,7 @@ func (t *Supplychain) SellToConsumer(ctx contractapi.TransactionContextInterface
 	if err != nil {
 		return err
 	}
-	if id == "RetailerMSP" {
+	if id != "RetailerMSP" {
 		return fmt.Errorf("User must be Retailer")
 	}
 
