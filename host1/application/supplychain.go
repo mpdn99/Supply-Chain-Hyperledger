@@ -17,7 +17,7 @@ import(
 
 const (
 	mspID		= "ManufacturerMSP"
-	cryptoPath	= "../organizations/peerOrganizations/manufacturer.example.com"
+	cryptoPath	= "../../organizations/peerOrganizations/manufacturer.example.com"
 	certPath = cryptoPath + "/users/User1@manufacturer.example.com/msp/signcerts/User1@manufacturer.example.com-cert.pem"
 	keyPath = cryptoPath + "/users/User1@manufacturer.example.com/msp/keystore/"
 	tlsCertPath = cryptoPath + "/peers/peer0.manufacturer.example.com/tls/ca.crt"
