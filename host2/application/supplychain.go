@@ -16,13 +16,13 @@ import(
 )
 
 const (
-	mspID		= "ManufacturerMSP"
-	cryptoPath	= "../organizations/peerOrganizations/manufacturer.example.com"
-	certPath = cryptoPath + "/users/User1@manufacturer.example.com/msp/signcerts/User1@manufacturer.example.com-cert.pem"
-	keyPath = cryptoPath + "/users/User1@manufacturer.example.com/msp/keystore/"
-	tlsCertPath = cryptoPath + "/peers/peer0.manufacturer.example.com/tls/ca.crt"
-	peerEndpoint = "localhost:7051"
-	gatewayPeer = "peer0.manufacturer.example.com"
+	mspID		= "DistributorMSP"
+	cryptoPath	= "../organizations/peerOrganizations/distributor.example.com"
+	certPath = cryptoPath + "/users/User1@distributor.example.com/msp/signcerts/User1@distributor.example.com-cert.pem"
+	keyPath = cryptoPath + "/users/User1@distributor.example.com/msp/keystore/"
+	tlsCertPath = cryptoPath + "/peers/peer0.distributor.example.com/tls/ca.crt"
+	peerEndpoint = "localhost:8051"
+	gatewayPeer = "peer0.distributor.example.com"
 	channelName = "supplychain"
 	chaincodeName = "supplychain"
 )
@@ -53,32 +53,14 @@ func main(){
 	network := gw.GetNetwork(channelName)
 	contract := network.GetContract(chaincodeName)
 
-	fmt.Println("initLedger:")
-	initLedger(contract)
-
 	fmt.Println("signIn:")
 	signIn(contract)
-
-	fmt.Println("createProduct:")
-	createProduct(contract)
-
-	fmt.Println("updateProduct:")
-	updateProduct(contract)
 
 	fmt.Println("sentToDistributor:")
 	sentToDistributor(contract)
 
-	fmt.Println("sentToRetailer:")
-	sentToRetailer(contract)
-
-	fmt.Println("sellToConsumer:")
-	sellToConsumer(contract)
-
 	fmt.Println("queryProduct:")
 	queryProduct(contract)
-
-	fmt.Println("queryAllProducts:")
-	queryAllProducts(contract)
 
 	log.Println("Application finished.")
 }
@@ -148,35 +130,8 @@ func newSign() identity.Sign {
 	return sign
 }
 
-func initLedger(contract *client.Contract){
-	fmt.Printf("Submit Transaction: InitLedger, function creates the initial set of assets on the ledger \n")
-
-	_, err := contract.SubmitTransaction("InitLedger")
-	if err != nil {
-		panic(fmt.Errorf("failed to submit transaction: %w", err))
-	}
-
-	fmt.Printf("*** Transaction committed successfully\n")
-}
-
 func signIn(contract *client.Contract){
 	result, err := contract.SubmitTransaction("SignIn", "manufacturer-admin", "admin@123")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(result))
-}
-
-func createProduct(contract *client.Contract){
-	result, err := contract.SubmitTransaction("CreateProduct", "Bia Saigon", "Sabeco", "121", "122", "12000")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(result))
-}
-
-func updateProduct(contract *client.Contract){
-	result, err := contract.SubmitTransaction("UpdateProduct", "Product1", "Bia 333", "12000")
 	if err != nil {
 		panic(err)
 	}
@@ -191,32 +146,8 @@ func sentToDistributor(contract *client.Contract){
 	fmt.Println(string(result))
 }
 
-func sentToRetailer(contract *client.Contract){
-	result, err := contract.SubmitTransaction("SentToRetailer", "Product1", "CircleK", "128", "128")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(result))
-}
-
-func sellToConsumer(contract *client.Contract){
-	result, err := contract.SubmitTransaction("SellToConsumer", "Product1", "0971026710", "130", "130")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(result))
-}
-
 func queryProduct(contract *client.Contract){
 	result, err := contract.EvaluateTransaction("QueryProduct", "Product1")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(result))
-}
-
-func queryAllProducts(contract *client.Contract){
-	result, err := contract.EvaluateTransaction("QueryAllProducts")
 	if err != nil {
 		panic(err)
 	}
