@@ -1,8 +1,8 @@
-package application
+package main
 
 import (
 	"fmt"
-	"./web"
+	"github.com/mpdn99/supply-chain-hyperledger/host1/application/web"
 )
 
 const (
@@ -11,12 +11,13 @@ const (
 
 func main() {
 	orgConfig := web.OrgSetup{
-		mspID:        "ManufacturerMSP",
-		certPath:     CryptoPath + "/users/User1@manufacturer.example.com/msp/signcerts/User1@manufacturer.example.com-cert.pem",
-		keyPath:      CryptoPath + "/users/User1@manufacturer.example.com/msp/keystore/",
-		tlsCertPath:  CryptoPath + "/peers/peer0.manufacturer.example.com/tls/ca.crt",
-		peerEndpoint: "localhost:7051",
-		gatewayPeer:  "peer0.manufacturer.example.com",
+		OrgName:      "Manufacturer",
+		MSPID:        "ManufacturerMSP",
+		CertPath:     CryptoPath + "/users/User1@manufacturer.example.com/msp/signcerts/User1@manufacturer.example.com-cert.pem",
+		KeyPath:      CryptoPath + "/users/User1@manufacturer.example.com/msp/keystore/",
+		TLSCertPath:  CryptoPath + "/peers/peer0.manufacturer.example.com/tls/ca.crt",
+		PeerEndpoint: "localhost:7051",
+		GatewayPeer:  "peer0.manufacturer.example.com",
 	}
 
 	orgSetup, err := web.Initialize(orgConfig)
