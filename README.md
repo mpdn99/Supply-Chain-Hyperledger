@@ -6,11 +6,10 @@ Today’s supply chains are global networks that generally include manufacturers
 Supply chain solutions built using Blockchain can provide the end-to-end visibility today’s supply chains need to track and trace their entire production process with increased automation efficiency.
 
 # Participant(Organization) in this System:
- - Host 1: Supplier
- - Host 2: Manufacturer
- - Host 3: Distributor
- - Host 4: Retailer
- - Host 5: Customer
+ - Host 1: Manufacturer
+ - Host 2: Distributor
+ - Host 3: Retailer
+ - Host 4: Customer
 
 # Application Flow:
   - User are enroll into the application by Admin of Organization
@@ -21,20 +20,16 @@ Supply chain solutions built using Blockchain can provide the end-to-end visibil
   - Customer trace production
 
 # Network Details:
-  - 5 Orgs(Supplier/Manufacturer/Distributor/Retailer/Customer)
-  - 5 Peers
+  - 4 Orgs(Manufacturer/Distributor/Retailer/Customer)
+  - 4 Peers
   - RAFT Orderer(5 Orderer)
 
 # Chaincode Functions:
-  - createUser (only Admin)
   - signIn (user Login)
-  - createGoods(Supplier)
   - createProduct(Manufacturer)
-  - updateProduct(Manufacturer, Distributor, Retailer)
-  - sendGoodsToManufacturer(Supplier)
-  - sendToDistributor(Manufacturer)
-  - sendToRetailer(Distributor)
-  - QueryAsset(Query by Production ID)
-  - QueryAll(All)
-  - orderGoods(Manufacturer place order)
-  - Invoke
+  - updateProduct(Manufacturer)
+  - sentToDistributor(Distributor)
+  - sentToRetailer(Retailer)
+  - sellToCustomer(Retailer)
+  - QueryProduct(Query by Production ID)
+  - QueryAllProducts(All)
