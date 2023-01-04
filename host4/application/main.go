@@ -17,7 +17,7 @@ func main() {
 		CertPath:     CryptoPath + "/users/User1@customer.example.com/msp/signcerts/User1@customer.example.com-cert.pem",
 		KeyPath:      CryptoPath + "/users/User1@customer.example.com/msp/keystore/",
 		TLSCertPath:  CryptoPath + "/peers/peer0.customer.example.com/tls/ca.crt",
-		PeerEndpoint: "localhost:7051",
+		PeerEndpoint: "localhost:10051",
 		GatewayPeer:  "peer0.customer.example.com",
 	}
 
