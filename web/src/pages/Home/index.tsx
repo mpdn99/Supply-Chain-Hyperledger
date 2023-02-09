@@ -13,7 +13,6 @@ const App: React.FC = () => {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
       }
     })
     .then(respose => respose.json())
