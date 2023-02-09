@@ -9,7 +9,7 @@ import (
 
 func (setup *OrgSetup) Invoke(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	fmt.Println("Received Invoke request")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 	if err := r.ParseForm(); err != nil {
 		fmt.Fprintf(w, "ParseForm() err: %s", err)
 		return
