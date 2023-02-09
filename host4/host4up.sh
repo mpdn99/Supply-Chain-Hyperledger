@@ -1,5 +1,5 @@
 echo "====================Initialization===================="
-docker-compose -f host4.yaml up -d
+docker compose -f host4.yaml up -d
 
 cd ..
 

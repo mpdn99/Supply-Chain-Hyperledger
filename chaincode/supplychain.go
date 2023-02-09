@@ -191,7 +191,7 @@ func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface,
 	postion.Date = txTimeAsPtr
 	postion.Longtitude = longtitude
 	postion.Latitude = latitude
-	postion.Organization = "Manufacturer"
+	postion.Organization = manufacturerID
 
 	product := Product{
 		Product_ID:      "Product" + strconv.Itoa(productCounter),
@@ -291,7 +291,7 @@ func (t *Supplychain) SentToDistributor(ctx contractapi.TransactionContextInterf
 	}
 
 	product.Distributor_ID = distributorID
-	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude , Organization: "Distributor"})
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude , Organization: distributorID})
 
 	updatedProductJSON, err := json.Marshal(product)
 	if err != nil {
@@ -333,7 +333,7 @@ func (t *Supplychain) SentToRetailer(ctx contractapi.TransactionContextInterface
 	}
 
 	product.Retailer_ID = retailerID
-	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude, Organization: "Retailer"})
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude, Organization: retailerID})
 
 	updatedProductJSON, err := json.Marshal(product)
 	if err != nil {
@@ -372,7 +372,7 @@ func (t *Supplychain) SellToConsumer(ctx contractapi.TransactionContextInterface
 	}
 
 	product.Consumer_ID = consumerID
-	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude, Organization: "Consumer"})
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude, Organization: consumerID})
 	product.Status = "Sold"
 
 	updatedProductJSON, err := json.Marshal(product)
