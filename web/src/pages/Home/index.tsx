@@ -8,10 +8,13 @@ const { Search } = Input;
 const App: React.FC = () => {
   const queryProduct = ( productId: string) => {
     console.log(productId)
-    fetch(`http://34.124.185.18:3000/query?channelid=supplychain&chaincodeid=supplychain&function=queryProduct&args=${productId}`, {
+    fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=queryProduct&args=${productId}`, {
       method: 'GET',
-      mode:'no-cors',
-      redirect: 'follow'
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
     })
     .then(respose => respose.json())
     .then(data => console.log(data))

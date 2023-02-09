@@ -8,6 +8,7 @@ import (
 )
 
 func (setup *OrgSetup) Invoke(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	fmt.Println("Received Invoke request")
 	if err := r.ParseForm(); err != nil {
 		fmt.Fprintf(w, "ParseForm() err: %s", err)
