@@ -8,6 +8,7 @@ import (
 func (setup OrgSetup) Query(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	w.Header().Set("Content-Type", "application/json")
 	fmt.Println("Received Query request")
 	queryParams := r.URL.Query()
 	chainCodeName := queryParams.Get("chaincodeid")

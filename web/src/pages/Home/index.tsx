@@ -15,7 +15,7 @@ const App: React.FC = () => {
         'Content-Type': 'application/json',
       }
     })
-    .then(respose => respose.json())
+    .then(respose => respose.text())
     .then(data => console.log(data))
   }
 
