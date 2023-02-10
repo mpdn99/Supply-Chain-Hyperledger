@@ -160,17 +160,24 @@ func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID
 		return nil, fmt.Errorf("Cannot find User %s", userID)
 	}
 
-	user := UserInfo{}
+	user := User{}
 	err = json.Unmarshal(userJSON, &user)
 	if err != nil {
 		return nil, err
 	}
 
+
 	if user.Password != password {
-		return fmt.Errorf("Incorrect password")
+		return nil, fmt.Errorf("Incorrect password")
 	}
 
-	return user, nil
+	userInfo := UserInfo{}
+	err = json.Unmarshal(userJSON, &user)
+	if err != nil {
+		return nil, err
+	}
+
+	return userInfo, nil
 }
 
 func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface, name string, manufacturerID string, longtitude string, latitude string, price string) error {
