@@ -13,19 +13,19 @@ const Login: React.FC = () => {
     const navigate = useNavigate();
     const [transaction, setTransaction] = useState<ITransactionItem | null>(null);
     const onFinish = (values: any) => {
-        fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=signIn&args=${values.username}&args=${values.password}`, {
-            method: 'POST',
+        fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=signIn&args=${values.username}&args=${values.password}`, {
+            method: 'GET',
             mode: 'cors',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             }
         })
             .then(respose => respose.json())
-            .then(data => setTransaction(data))
+            .then(data => console.log(data))
     };
 
     useEffect(() => {
-        if (transaction?.transactionID) {
+        if (transaction) {
             navigate('/product-management')
         }
     },
