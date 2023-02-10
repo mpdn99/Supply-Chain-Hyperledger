@@ -151,7 +151,7 @@ func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) er
 	return nil
 }
 
-func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID string, password string) *User, error {
+func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID string, password string) (*User, error) {
 	userJSON, err := ctx.GetStub().GetState(userID)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
