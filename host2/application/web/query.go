@@ -19,8 +19,9 @@ func (setup OrgSetup) Query(w http.ResponseWriter, r *http.Request) {
 	contract := network.GetContract(chainCodeName)
 	evaluateResponse, err := contract.EvaluateTransaction(function, args...)
 	if err != nil {
-		fmt.Fprintf(w, "Error: %s", err)
+		// fmt.Fprintf(w, "Error: %s", err)
+		fmt.Fprintf(w, `{"error": "%s does not exist!"}`, queryParams.Get("args"))
 		return
 	}
-	fmt.Fprintf(w, "Response: %s", evaluateResponse)
+	fmt.Fprintf(w, "%s", evaluateResponse)
 }
