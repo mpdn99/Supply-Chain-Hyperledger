@@ -24,18 +24,18 @@ func (setup *OrgSetup) Invoke(w http.ResponseWriter, r *http.Request) {
 	contract := network.GetContract(chainCodeName)
 	txn_proposal, err := contract.NewProposal(function, client.WithArguments(args...))
 	if err != nil {
-		fmt.Fprintf(w, "Error creating txn proposal: %s", err)
+		fmt.Fprintf(w, `[{"error":"%s"}]`, err)
 		return
 	}
 	txn_endorsed, err := txn_proposal.Endorse()
 	if err != nil {
-		fmt.Fprintf(w, "Error endorsing txn: %s", err)
+		fmt.Fprintf(w, `[{"error":"%s"}]`, err)
 		return
 	}
 	txn_committed, err := txn_endorsed.Submit()
 	if err != nil {
-		fmt.Fprintf(w, "Error submitting transaction: %s", err)
+		fmt.Fprintf(w, `[{"error":"%s"}]`, err)
 		return
 	}
-	fmt.Fprintf(w, "Transaction ID : %s Response: %s", txn_committed.TransactionID(), txn_endorsed.Result())
+	fmt.Fprintf(w, `[{"transactionID":"%s"}]`, txn_committed.TransactionID())
 }
