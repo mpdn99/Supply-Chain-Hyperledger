@@ -36,6 +36,5 @@ func (setup *OrgSetup) Invoke(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, `{"error":"%s"}`, err)
 		return
 	}
-	evaluateResponse, err := contract.EvaluateTransaction(function, args...)
 	fmt.Fprintf(w, `{"transactionID":"%s"}`, txn_committed.TransactionID())
 }

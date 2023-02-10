@@ -23,5 +23,5 @@ func (setup OrgSetup) Query(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, `{"error": "%s does not exist!"}`, queryParams.Get("args"))
 		return
 	}
-	fmt.Fprintf(w, "[%s]", evaluateResponse)
+	fmt.Fprintf(w, "%s", evaluateResponse)
 }
