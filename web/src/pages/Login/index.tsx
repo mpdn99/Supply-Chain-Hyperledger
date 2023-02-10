@@ -1,25 +1,40 @@
 import { Button, Checkbox, Form, Input } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/logo.jpg'
 import './index.css'
 
+interface ITransactionItem {
+    transactionID?: string,
+    err?: string
+}
+
 const Login: React.FC = () => {
+    const navigate = useNavigate();
+    const [transaction, setTransaction] = useState<ITransactionItem | null>(null);
     const onFinish = (values: any) => {
         fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=signIn&args=${values.username}&args=${values.password}`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
         })
-        .then(respose => respose.text())
-        .then(data => console.log(data))
+            .then(respose => respose.json())
+            .then(data => setTransaction(data))
     };
-      
+
+    useEffect(() => {
+        if (transaction?.transactionID) {
+            navigate('/product-management')
+        }
+    },
+        [transaction])
+
     const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+        console.log('Failed:', errorInfo);
     };
-    return(
+    return (
         <div className='login-view'>
             <img src={Logo} />
             <Form
@@ -32,27 +47,27 @@ const Login: React.FC = () => {
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
-                <h2 style={{textAlign: 'center', marginBottom: '30px'}}>Login</h2>
+                <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Login</h2>
                 <Form.Item
-                label="Username"
-                name="username"
-                rules={[{ required: true, message: 'Please input your username!' }]}
+                    label="Username"
+                    name="username"
+                    rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                <Input />
+                    <Input />
                 </Form.Item>
 
                 <Form.Item
-                label="Password"
-                name="password"
-                rules={[{ required: true, message: 'Please input your password!' }]}
+                    label="Password"
+                    name="password"
+                    rules={[{ required: true, message: 'Please input your password!' }]}
                 >
-                <Input.Password />
+                    <Input.Password />
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 9, span: 16 }}>
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
                 </Form.Item>
             </Form>
         </div>

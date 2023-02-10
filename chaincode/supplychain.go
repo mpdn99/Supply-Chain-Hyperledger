@@ -28,6 +28,15 @@ type User struct {
 	Password     string `json:"Password"`
 }
 
+type UserInfo struct {
+	Name         string `json:"Name`
+	User_ID      string `json:"UserId"`
+	Email        string `json:"Email"`
+	UserType     string `json:"UserType"`
+	Organization string `json:"Organization"`
+	Address      string `json:"Address"`
+}
+
 type ProductPosition struct {
 	Date            string   `json:"Date"`
 	Organization    string   `json:"Organization"`
@@ -142,26 +151,26 @@ func (t *Supplychain) InitLedger(ctx contractapi.TransactionContextInterface) er
 	return nil
 }
 
-func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID string, password string) error {
+func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID string, password string) *User, error {
 	userJSON, err := ctx.GetStub().GetState(userID)
 	if err != nil {
-		return fmt.Errorf("Failed to read from world state. %s", err.Error())
+		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
 	}
 	if userJSON == nil {
-		return fmt.Errorf("Cannot find User %s", userID)
+		return nil, fmt.Errorf("Cannot find User %s", userID)
 	}
 
-	user := User{}
+	user := UserInfo{}
 	err = json.Unmarshal(userJSON, &user)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	if user.Password != password {
 		return fmt.Errorf("Incorrect password")
 	}
 
-	return nil
+	return user, nil
 }
 
 func (t *Supplychain) CreateProduct(ctx contractapi.TransactionContextInterface, name string, manufacturerID string, longtitude string, latitude string, price string) error {

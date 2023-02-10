@@ -7,14 +7,20 @@ import {
 } from "react-router-dom"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
+import ProductManagement from './pages/Product Management';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home></Home>
-  }, {
+  }, 
+  {
     path: "/login",
     element: <Login></Login>
+  },
+  {
+    path: "/product-management",
+    element: <ProductManagement></ProductManagement>
   }
 ])
 
