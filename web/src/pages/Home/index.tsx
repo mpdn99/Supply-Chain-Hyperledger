@@ -16,8 +16,7 @@ interface productResponseItemProps {
   Consumer: string,
   Status: string,
   Position: positionItemProps[],
-  Price: number,
-  error: string
+  Price: number
 }
 
 interface positionItemProps {
@@ -28,8 +27,11 @@ interface positionItemProps {
 }
 
 const Home: React.FC = () => {
+  const navigate = useNavigate()
+  const [productResponse, setProductResponse] = useState<productResponseItemProps | null>();
+  const [err, setErr] = useState('');
+
   const queryProduct = ( productId: string) => {
-    console.log(productId)
     fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=queryProduct&args=${productId}`, {
       method: 'GET',
       mode: 'cors',
@@ -39,10 +41,9 @@ const Home: React.FC = () => {
     })
     .then(respose => respose.json())
     .then(data => setProductResponse(data))
-    .then(() => console.log(productResponse))
+    .catch(() => setErr(productId))
   }
-  const [productResponse, setProductResponse] = useState([]);
-  const navigate = useNavigate()
+
   const handleLogin = () => {
     navigate("/login")
   }
@@ -60,7 +61,7 @@ const Home: React.FC = () => {
           }}
         /> */}
         <div>
-          <img src={Logo} style={{
+          <img src={Logo} alt="" style={{
             float: 'left',
             display: 'block',
             width: '110px',
@@ -74,50 +75,57 @@ const Home: React.FC = () => {
       <Content className="site-layout" style={{ padding: '0 50px' }}>
         <h1>Product tracking</h1>
         <Search placeholder="Product Code" enterButton="Search" size="large" onSearch={queryProduct}></Search>
-        {
-          productResponse && productResponse.length > 0 && productResponse?.map((item:productResponseItemProps) => {
-            console.log(item.Position)
-            if(item.error){
-              return(
-                <p style={{color: 'red'}}>{item.error}</p>
-              )
-            }
-            return(
-              <>
-                <p>
+        {productResponse ?
+          (
+            <>
+              <p>
+                <span className='productTxt'>
+                  Product name:
+                </span>
+                <span>
+                  {productResponse.Name}
+                </span>
+              </p><p>
                   <span className='productTxt'>
-                    Product name:
+                    Manufacturer:
                   </span>
                   <span>
-                    {item.Name}
+                    {productResponse.Manufacturer}
                   </span>
                 </p><p>
-                    <span className='productTxt'>
-                      Manufacturer:
-                    </span>
-                    <span>
-                      {item.Manufacturer}
-                    </span>
-                  </p><p>
-                    <span className='productTxt'>
-                      Status:
-                    </span>
-                    <span>
-                      {item.Status}
-                    </span>
-                  </p><p>
-                    <span className='productTxt'>Tracking Proceess</span>
-                  </p><Timeline style={{ margin: '20px 30px 20px 30px' }}>
-                    <Timeline.Item color="green">Product was manufactured at {item?.Position[0]?.Organization} {item?.Position[0]?.Date}</Timeline.Item>
-                    <Timeline.Item color="yellow">Product was transfered to {item?.Position[1]?.Organization} {item?.Position[0]?.Date}</Timeline.Item>
-                    <Timeline.Item color="blue">Product was transfered to {item?.Position[2]?.Organization} {item?.Position[0]?.Date}</Timeline.Item>
-                    <Timeline.Item color="grey">Product was sold to {item?.Position[3]?.Organization} {item?.Position[0]?.Date}</Timeline.Item>
-                  </Timeline>
-                </>
-            )
-          })
+                  <span className='productTxt'>
+                    Status:
+                  </span>
+                  <span>
+                    {productResponse.Status}
+                  </span>
+                </p><p>
+                  <span className='productTxt'>Tracking Proceess</span>
+              </p><Timeline style={{ margin: '20px 30px 20px 30px' }} items={[
+                {
+                  color: 'green',
+                  children: `Product was manufactured at ${productResponse.Position[0]?.Organization} ${productResponse.Position[0]?.Date}`
+                },
+                {
+                  color: 'yellow',
+                  children: `Product was transfered to ${productResponse.Position[1]?.Organization} ${productResponse.Position[1]?.Date}`
+                },
+                {
+                  color: 'blue',
+                  children: `Product was transfered to ${productResponse.Position[2]?.Organization} ${productResponse.Position[2]?.Date}`
+                },
+                {
+                  color: 'gray',
+                  children: `Product was sold at ${productResponse.Position[3]?.Organization} ${productResponse.Position[3]?.Date}`
+                }
+                ]}>
+                </Timeline>
+              </>
+          ) :
+          (
+            err ? <p style={{color: 'red'}}>{err} not found!</p> : null
+          )
         }
-          
       </Content>
       <Footer style={{ textAlign: 'center' }}>SupChain ©2023 Created by DucNghiaPham</Footer>
     </Layout>
