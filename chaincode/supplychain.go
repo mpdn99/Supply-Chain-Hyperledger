@@ -419,8 +419,8 @@ func (t *Supplychain) QueryProduct(ctx contractapi.TransactionContextInterface, 
 }
 
 func (t *Supplychain) QueryAllProducts(ctx contractapi.TransactionContextInterface) ([]*Product, error) {
-	startKey := "PRODUCT0"
-	endKey := "PRODUCT999"
+	startKey := "Product1"
+	endKey := "Product999"
 
 	resultsIterator, err := ctx.GetStub().GetStateByRange(startKey, endKey)
 	if err != nil {

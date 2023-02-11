@@ -1,17 +1,14 @@
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/logo.jpg'
 import './index.css'
 
-interface ITransactionItem {
-    transactionID?: string,
-    err?: string
-}
-
 const Login: React.FC = () => {
     const navigate = useNavigate();
-    const [transaction, setTransaction] = useState<ITransactionItem | null>(null);
+    const [transaction, setTransaction] = useState();
+    const [err, setErr] = useState(false);
+
     const onFinish = (values: any) => {
         fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=signIn&args=${values.username}&args=${values.password}`, {
             method: 'GET',
@@ -21,22 +18,19 @@ const Login: React.FC = () => {
             }
         })
             .then(respose => respose.json())
-            .then(data => console.log(data))
+            .then(data => setTransaction(data))
+            .catch(() => setErr(true))
     };
 
     useEffect(() => {
         if (transaction) {
             navigate('/product-management')
         }
-    },
-        [transaction])
+    }, [transaction])
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
-    };
     return (
         <div className='login-view'>
-            <img src={Logo} />
+            <img src={Logo} alt=""/>
             <Form
                 name="basic"
                 labelCol={{ span: 8 }}
@@ -44,10 +38,12 @@ const Login: React.FC = () => {
                 style={{ maxWidth: 600, border: '2px solid #52C8FA', padding: '20px', margin: '30px', borderRadius: '10px' }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
                 <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Login</h2>
+                {
+                    err ? <p style={{color: 'red'}}> Incorrect username or password!</p> : null
+                }
                 <Form.Item
                     label="Username"
                     name="username"
@@ -70,6 +66,7 @@ const Login: React.FC = () => {
                     </Button>
                 </Form.Item>
             </Form>
+            <Link to="/" style={{textAlign: 'right'}}>Back to Home page</Link>
         </div>
     )
 }
