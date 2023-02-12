@@ -36,7 +36,6 @@ const Login: React.FC = () => {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
                 style={{ maxWidth: 600, border: '2px solid #52C8FA', padding: '20px', margin: '30px', borderRadius: '10px' }}
-                initialValues={{ remember: true }}
                 onFinish={onFinish}
                 autoComplete="off"
             >
