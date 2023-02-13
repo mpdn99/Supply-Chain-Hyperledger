@@ -27,17 +27,14 @@ interface positionItemProps {
   Latitude: number
 }
 
-const ProductManagement: React.FC = () => {
-  const [form1] = Form.useForm();
-  const [form2] = Form.useForm();
+const DeliverConfirmation: React.FC = () => {
+  const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const [productResponse, setProductResponse] = useState<productResponseItemProps[]>([]);
   const [err, setErr] = useState(false);
-  const [openModal1, setOpenModal1] = useState(false);
-  const [openModal2, setOpenModal2] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [productSelected, setProductSelected] = useState<productResponseItemProps>();
   const utils = useContext(AuthContext)
 
 
@@ -63,49 +60,20 @@ const ProductManagement: React.FC = () => {
     { title: 'Customer', dataIndex: 'Customer', key: 'ProductId' },
     { title: 'Status', dataIndex: 'Status', key: 'ProductId' },
     { title: 'Price', dataIndex: 'Price', key: 'ProductId' },
-    {
-      title: 'Action', key: 'Operation', render: (_, product) => {
-        if (!product.Distributor) {
-          return <a onClick={() => actionOnClickHandler(product)}>Edit</a>
-        }
-      }
-    },
   ];
 
-  const addBtnHandler = () => {
-    setOpenModal2(true);
+
+  const confirmBtnHandler = () => {
+    setOpenModal(true);
   }
 
-  const handleOk1 = () => {
+  const handleOk = () => {
     setConfirmLoading(true);
-    form1
+    form
       .validateFields()
       .then((values) => {
-        form1.resetFields();
-        fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=updateProduct&args=${values.productId}&args=${values.name}&args=${values.price}`, {
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        })
-          .then(respose => respose.text())
-          .then(data => console.log(data))
-          .catch(() => setErr(true))
-      })
-    setTimeout(() => {
-      setOpenModal1(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
-  const handleOk2 = () => {
-    setConfirmLoading(true);
-    form2
-      .validateFields()
-      .then((values) => {
-        form2.resetFields();
-        fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=createProduct&args=${values.name}&args=${values.manufacturer}&args=${values.longtitude}&args=${values.latitude}&args=${values.price}`, {
+        form.resetFields();
+        fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=sentToDistributor&args=${values.productId}&args=${values.distributorId}&args=${values.longtitude}&args=${values.latitude}`, {
           method: 'GET',
           mode: 'cors',
           headers: {
@@ -117,94 +85,59 @@ const ProductManagement: React.FC = () => {
           .catch(() => setErr(true))
       });
     setTimeout(() => {
-      setOpenModal2(false);
+      setOpenModal(false);
       setConfirmLoading(false);
     }, 2000);
   };
 
   const handleCancel = () => {
-    setOpenModal1(false);
-    setOpenModal2(false);
+    setOpenModal(false);
   };
 
-  const actionOnClickHandler = (values: any) => {
-    setOpenModal1(true);
-    setProductSelected(values)
-  }
-
   useEffect(() => {
-    if (!utils.token || utils.token.Organization != "ManufacturerOrg") {
+    if (!utils.token || utils.token.Organization != "DistributorOrg") {
       navigate("/login")
     } else {
       queryAllProduct();
     }
-  }, [handleOk1, handleOk2])
+  }, [handleOk])
 
   return (
     <Layout className="layout">
       <PageHeader />
       <Content className="site-layout" style={{ padding: '0 50px' }}>
-        <h1>PRODUCT MANAGEMENT</h1>
+        <h1>DELIVER MANAGEMENT</h1>
         {
           err ? <p style={{ color: 'red' }}> Cannot get data from server!</p> : null
         }
-        <Button style={{ margin: '16px 8px 16px 8px' }} id="addProductBtn" type="primary" onClick={addBtnHandler}>Add Product</Button>
+        <Button style={{ margin: '16px 8px 16px 8px' }} id="addProductBtn" type="primary" onClick={confirmBtnHandler}>Confirm new Product</Button>
         <Table
           columns={columns}
           dataSource={productResponse}
         />
         <Modal
-          title="Update product"
-          open={openModal1}
-          onOk={handleOk1}
+          title="Confirm new product"
+          open={openModal}
+          onOk={handleOk}
           confirmLoading={confirmLoading}
           onCancel={handleCancel}
         >
           <Form
-            form={form1}
+            form={form}
             layout="vertical"
-            name="updateForm"
-            initialValues={{ productId: productSelected?.ProductId, name: productSelected?.Name, price: productSelected?.Price }}
+            name="form_in_modal"
+            initialValues={{ distributorId: "GiaoHangTietKiem", longtitude: 11.841790, latitude: 107.633600 }}
           >
             <Form.Item
               name="productId"
-              label="Product Id"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
-              hidden
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item name="name" label="Name">
-              <Input type="textarea" />
-            </Form.Item>
-            <Form.Item name="price" label="Price">
-              <Input type="textarea" />
-            </Form.Item>
-          </Form>
-        </Modal>
-        <Modal
-          title="Add product"
-          open={openModal2}
-          onOk={handleOk2}
-          confirmLoading={confirmLoading}
-          onCancel={handleCancel}
-        >
-          <Form
-            form={form2}
-            layout="vertical"
-            name="form_in_modal"
-            initialValues={{ manufacturer: "Sabeco", longtitude: 10.851790, latitude: 106.637100 }}
-          >
-            <Form.Item
-              name="name"
-              label="Name"
+              label="Product ID"
               rules={[{ required: true, message: 'Please input the product ID!' }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              name="manufacturer"
-              label="Manufacturer"
+              name="distributorId"
+              label="Distributor ID"
               rules={[{ required: true, message: 'Please input the product ID!' }]}
               hidden
             >
@@ -226,13 +159,6 @@ const ProductManagement: React.FC = () => {
             >
               <Input />
             </Form.Item>
-            <Form.Item
-              name="price"
-              label="Price"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
-            >
-              <Input />
-            </Form.Item>
           </Form>
         </Modal>
       </Content>
@@ -241,4 +167,4 @@ const ProductManagement: React.FC = () => {
   )
 }
 
-export default ProductManagement;
+export default DeliverConfirmation;

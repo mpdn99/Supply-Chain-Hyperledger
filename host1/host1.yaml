@@ -85,7 +85,7 @@ services:
       - 11050:11050
       - 11053:11053
     networks:
-      - supply-chain 
+      - supply-chain
 
   peer0.manufacturer.example.com:
     container_name: peer0.manufacturer.example.com

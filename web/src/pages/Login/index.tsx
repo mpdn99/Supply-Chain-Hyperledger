@@ -1,36 +1,34 @@
 import { Button, Form, Input } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../App';
 import Logo from '../../assets/logo.jpg'
 import './index.css'
 
+
 const Login: React.FC = () => {
     const navigate = useNavigate();
-    const [transaction, setTransaction] = useState();
-    const [err, setErr] = useState(false);
+    const utils: any = useContext(AuthContext)
 
     const onFinish = (values: any) => {
-        fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=signIn&args=${values.username}&args=${values.password}`, {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(respose => respose.json())
-            .then(data => setTransaction(data))
-            .catch(() => setErr(true))
+        utils.handleLogin(values.username, values.password)
     };
 
     useEffect(() => {
-        if (transaction) {
+        if (utils.token && utils.token.Organization == "ManufacturerOrg") {
             navigate('/product-management')
         }
-    }, [transaction])
+        if (utils.token && utils.token.Organization == "DistributorOrg") {
+            navigate('/product-confirmation')
+        }
+        if (utils.token && utils.token.Organization == "RetailerOrg") {
+            navigate('/saler-confirmation')
+        }
+    }, [utils.token])
 
     return (
         <div className='login-view'>
-            <img src={Logo} alt=""/>
+            <img src={Logo} alt="" />
             <Form
                 name="basic"
                 labelCol={{ span: 8 }}
@@ -41,7 +39,7 @@ const Login: React.FC = () => {
             >
                 <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Login</h2>
                 {
-                    err ? <p style={{color: 'red'}}> Incorrect username or password!</p> : null
+                    utils?.err ? <p style={{ color: 'red' }}> Incorrect username or password!</p> : null
                 }
                 <Form.Item
                     label="Username"
@@ -65,7 +63,7 @@ const Login: React.FC = () => {
                     </Button>
                 </Form.Item>
             </Form>
-            <Link to="/" style={{textAlign: 'right'}}>Back to Home page</Link>
+            <Link to="/" style={{ textAlign: 'right' }}>Back to Home page</Link>
         </div>
     )
 }

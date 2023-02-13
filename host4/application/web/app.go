@@ -19,6 +19,10 @@ type OrgSetup struct {
 	Gateway      client.Gateway
 }
 
+func handler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 func Serve(setups OrgSetup) {
 	http.HandleFunc("/query", setups.Query)
 	http.HandleFunc("/invoke", setups.Invoke)

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Layout, Button, Input, Timeline } from 'antd';
+import { Layout, Input, Timeline } from 'antd';
 import "./index.css"
-import { useNavigate } from "react-router-dom";
-import Logo from '../../assets/logo2.jpg'
+import PageHeader from '../../components/PageHeader';
 
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 const { Search } = Input;
 
 interface productResponseItemProps {
@@ -27,11 +26,10 @@ interface positionItemProps {
 }
 
 const Home: React.FC = () => {
-  const navigate = useNavigate()
   const [productResponse, setProductResponse] = useState<productResponseItemProps | null>();
   const [err, setErr] = useState('');
 
-  const queryProduct = ( productId: string) => {
+  const queryProduct = (productId: string) => {
     fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=queryProduct&args=${productId}`, {
       method: 'GET',
       mode: 'cors',
@@ -39,39 +37,14 @@ const Home: React.FC = () => {
         'Content-Type': 'application/json',
       }
     })
-    .then(respose => respose.json())
-    .then(data => setProductResponse(data))
-    .catch(() => setErr(productId))
-  }
-
-  const handleLogin = () => {
-    navigate("/login")
+      .then(respose => respose.json())
+      .then(data => setProductResponse(data))
+      .catch(() => setErr(productId))
   }
 
   return (
     <Layout className="layout">
-      <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
-        {/* <div
-          style={{
-            float: 'left',
-            width: 120,
-            height: 31,
-            margin: '16px 24px 16px 0',
-            background: 'rgba(255, 255, 255, 0.2)',
-          }}
-        /> */}
-        <div>
-          <img src={Logo} alt="" style={{
-            float: 'left',
-            display: 'block',
-            width: '110px',
-            height: 'auto',
-            marginTop: '15px'
-          }}>
-          </img>
-        </div>
-        <Button style={{float: 'right', margin: '16px 0px 0px 0px'}} id="loginBtn" type="primary" onClick={handleLogin}>Login</Button>
-      </Header>
+      <PageHeader />
       <Content className="site-layout" style={{ padding: '0 50px' }}>
         <h1>Product tracking</h1>
         <Search placeholder="Product Code" enterButton="Search" size="large" onSearch={queryProduct}></Search>
@@ -86,21 +59,21 @@ const Home: React.FC = () => {
                   {productResponse.Name}
                 </span>
               </p><p>
-                  <span className='productTxt'>
-                    Manufacturer:
-                  </span>
-                  <span>
-                    {productResponse.Manufacturer}
-                  </span>
-                </p><p>
-                  <span className='productTxt'>
-                    Status:
-                  </span>
-                  <span>
-                    {productResponse.Status}
-                  </span>
-                </p><p>
-                  <span className='productTxt'>Tracking Proceess</span>
+                <span className='productTxt'>
+                  Manufacturer:
+                </span>
+                <span>
+                  {productResponse.Manufacturer}
+                </span>
+              </p><p>
+                <span className='productTxt'>
+                  Status:
+                </span>
+                <span>
+                  {productResponse.Status}
+                </span>
+              </p><p>
+                <span className='productTxt'>Tracking Proceess</span>
               </p><Timeline style={{ margin: '20px 30px 20px 30px' }} items={[
                 {
                   color: 'green',
@@ -118,12 +91,12 @@ const Home: React.FC = () => {
                   color: 'gray',
                   children: `Product was sold at ${productResponse.Position[3]?.Organization} ${productResponse.Position[3]?.Date}`
                 }
-                ]}>
-                </Timeline>
-              </>
+              ]}>
+              </Timeline>
+            </>
           ) :
           (
-            err ? <p style={{color: 'red'}}>{err} not found!</p> : null
+            err ? <p style={{ color: 'red' }}>{err} not found!</p> : null
           )
         }
       </Content>
