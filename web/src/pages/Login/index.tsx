@@ -39,7 +39,7 @@ const Login: React.FC = () => {
             >
                 <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Login</h2>
                 {
-                    utils?.err ? <p style={{ color: 'red' }}> Incorrect username or password!</p> : null
+                    utils.err ? <p style={{ color: 'red' }}> Incorrect username or password!</p> : null
                 }
                 <Form.Item
                     label="Username"

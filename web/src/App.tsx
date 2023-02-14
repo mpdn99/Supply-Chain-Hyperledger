@@ -29,8 +29,7 @@ const App: React.FC<Props> = ({children}) => {
     const [err, setErr] = useState(false);
 
     const handleLogin = (username: any, password: any) => {
-        console.log(username, password)
-        fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=signIn&args=${username}&args=${password}`, {
+        fetch(`http://34.143.198.108:3000/query?channelid=supplychain&chaincodeid=supplychain&function=signIn&args=${username}&args=${password}`, {
             method: 'GET',
             mode: 'cors',
             headers: {
@@ -38,8 +37,12 @@ const App: React.FC<Props> = ({children}) => {
             }
         })
             .then(respose => respose.json())
-            .then(data => setToken(data))
-            .catch(() => setErr(true))
+            .then(data => {
+                if (data.error) {
+                    setErr(true)
+                }
+                setToken(data)
+            })
     }
 
     const handleLogout = () => {

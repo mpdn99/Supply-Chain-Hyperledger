@@ -47,7 +47,10 @@ const DeliverConfirmation: React.FC = () => {
       }
     })
       .then(respose => respose.json())
-      .then(data => setProductResponse(data))
+      .then(data => data.filter((item: any) => {
+        return item.Distributor == "GiaoHangTietKiem"
+      }))
+      .then(products => setProductResponse(products))
       .catch(() => setErr(true))
   }
 
@@ -57,7 +60,7 @@ const DeliverConfirmation: React.FC = () => {
     { title: 'Manufacturer', dataIndex: 'Manufacturer', key: 'ProductId' },
     { title: 'Distributor', dataIndex: 'Distributor', key: 'ProductId' },
     { title: 'Retailer', dataIndex: 'Retailer', key: 'ProductId' },
-    { title: 'Customer', dataIndex: 'Customer', key: 'ProductId' },
+    { title: 'Customer', dataIndex: 'Consumer', key: 'ProductId' },
     { title: 'Status', dataIndex: 'Status', key: 'ProductId' },
     { title: 'Price', dataIndex: 'Price', key: 'ProductId' },
   ];
@@ -73,14 +76,14 @@ const DeliverConfirmation: React.FC = () => {
       .validateFields()
       .then((values) => {
         form.resetFields();
-        fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=sentToDistributor&args=${values.productId}&args=${values.distributorId}&args=${values.longtitude}&args=${values.latitude}`, {
-          method: 'GET',
+        fetch(`http://35.240.163.29:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=sentToDistributor&args=${values.productId}&args=${values.distributorId}&args=${values.longtitude}&args=${values.latitude}`, {
+          method: 'POST',
           mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
           }
         })
-          .then(respose => respose.text())
+          .then(respose => respose.json())
           .then(data => console.log(data))
           .catch(() => setErr(true))
       });
@@ -138,7 +141,7 @@ const DeliverConfirmation: React.FC = () => {
             <Form.Item
               name="distributorId"
               label="Distributor ID"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
+              rules={[{ required: true, message: 'Please input the Distributor ID!' }]}
               hidden
             >
               <Input />
@@ -146,7 +149,7 @@ const DeliverConfirmation: React.FC = () => {
             <Form.Item
               name="longtitude"
               label="Longtitude"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
+              rules={[{ required: true, message: 'Please input the longtitude!' }]}
               hidden
             >
               <Input />
@@ -154,7 +157,7 @@ const DeliverConfirmation: React.FC = () => {
             <Form.Item
               name="latitude"
               label="Latitude"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
+              rules={[{ required: true, message: 'Please input the latitude!' }]}
               hidden
             >
               <Input />

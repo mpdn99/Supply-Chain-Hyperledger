@@ -89,7 +89,7 @@ const Home: React.FC = () => {
                 },
                 {
                   color: 'gray',
-                  children: `Product was sold at ${productResponse.Position[3]?.Organization} ${productResponse.Position[3]?.Date}`
+                  children: `Product was sold at ${productResponse.Position[2]?.Organization} ${productResponse.Position[3]?.Date}`
                 }
               ]}>
               </Timeline>

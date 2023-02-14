@@ -60,7 +60,7 @@ const ProductManagement: React.FC = () => {
     { title: 'Manufacturer', dataIndex: 'Manufacturer', key: 'ProductId' },
     { title: 'Distributor', dataIndex: 'Distributor', key: 'ProductId' },
     { title: 'Retailer', dataIndex: 'Retailer', key: 'ProductId' },
-    { title: 'Customer', dataIndex: 'Customer', key: 'ProductId' },
+    { title: 'Customer', dataIndex: 'Consumer', key: 'ProductId' },
     { title: 'Status', dataIndex: 'Status', key: 'ProductId' },
     { title: 'Price', dataIndex: 'Price', key: 'ProductId' },
     {
@@ -83,7 +83,7 @@ const ProductManagement: React.FC = () => {
       .then((values) => {
         form1.resetFields();
         fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=updateProduct&args=${values.productId}&args=${values.name}&args=${values.price}`, {
-          method: 'GET',
+          method: 'POST',
           mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ const ProductManagement: React.FC = () => {
       .then((values) => {
         form2.resetFields();
         fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=createProduct&args=${values.name}&args=${values.manufacturer}&args=${values.longtitude}&args=${values.latitude}&args=${values.price}`, {
-          method: 'GET',
+          method: 'POST',
           mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
@@ -198,14 +198,14 @@ const ProductManagement: React.FC = () => {
             <Form.Item
               name="name"
               label="Name"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
+              rules={[{ required: true, message: 'Please input the name!' }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="manufacturer"
               label="Manufacturer"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
+              rules={[{ required: true, message: 'Please input the Manufacturer ID!' }]}
               hidden
             >
               <Input />
@@ -213,7 +213,7 @@ const ProductManagement: React.FC = () => {
             <Form.Item
               name="longtitude"
               label="Longtitude"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
+              rules={[{ required: true, message: 'Please input the longtitude!' }]}
               hidden
             >
               <Input />
@@ -221,7 +221,7 @@ const ProductManagement: React.FC = () => {
             <Form.Item
               name="latitude"
               label="Latitude"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
+              rules={[{ required: true, message: 'Please input the latitude!' }]}
               hidden
             >
               <Input />
@@ -229,7 +229,7 @@ const ProductManagement: React.FC = () => {
             <Form.Item
               name="price"
               label="Price"
-              rules={[{ required: true, message: 'Please input the product ID!' }]}
+              rules={[{ required: true, message: 'Please input the price!' }]}
             >
               <Input />
             </Form.Item>
