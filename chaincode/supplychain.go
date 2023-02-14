@@ -38,10 +38,10 @@ type UserInfo struct {
 }
 
 type ProductPosition struct {
-	Date            string   `json:"Date"`
-	Organization    string   `json:"Organization"`
-	Longtitude string `json:"Longtitude"`
-	Latitude   string `json:"Latitude"`
+	Date         string `json:"Date"`
+	Organization string `json:"Organization"`
+	Longtitude   string `json:"Longtitude"`
+	Latitude     string `json:"Latitude"`
 }
 
 type Product struct {
@@ -165,7 +165,6 @@ func (t *Supplychain) SignIn(ctx contractapi.TransactionContextInterface, userID
 	if err != nil {
 		return nil, err
 	}
-
 
 	if user.Password != password {
 		return nil, fmt.Errorf("Incorrect password")
@@ -296,8 +295,8 @@ func (t *Supplychain) SentToDistributor(ctx contractapi.TransactionContextInterf
 	product := Product{}
 	json.Unmarshal(productJSON, &product)
 
-	if product.Retailer_ID != "" {
-		return fmt.Errorf("Product has sent to Retailer. Cannot update")
+	if product.Distributor_ID != "" {
+		return fmt.Errorf("Product has been confirmed")
 	}
 
 	//Update product
@@ -307,7 +306,7 @@ func (t *Supplychain) SentToDistributor(ctx contractapi.TransactionContextInterf
 	}
 
 	product.Distributor_ID = distributorID
-	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude , Organization: distributorID})
+	product.Positions = append(product.Positions, ProductPosition{Date: txTimeAsPtr, Latitude: latitude, Longtitude: longtitude, Organization: distributorID})
 
 	updatedProductJSON, err := json.Marshal(product)
 	if err != nil {
@@ -338,8 +337,12 @@ func (t *Supplychain) SentToRetailer(ctx contractapi.TransactionContextInterface
 	product := Product{}
 	json.Unmarshal(productJSON, &product)
 
-	if product.Consumer_ID != "" {
-		return fmt.Errorf("Product has sent to Consumer. Cannot update")
+	if product.Distributor_ID == "" {
+		return fmt.Errorf("Product has not been delivered to Distributor")
+	}
+
+	if product.Retailer_ID != "" {
+		return fmt.Errorf("Product has been confirmed")
 	}
 
 	//Update product
@@ -381,6 +384,14 @@ func (t *Supplychain) SellToConsumer(ctx contractapi.TransactionContextInterface
 
 	product := Product{}
 	json.Unmarshal(productJSON, &product)
+
+	if product.Retailer_ID == "" {
+		fmt.Errorf("Product has not been delivered to Retailer")
+	}
+
+	if product.Consumer_ID != "" {
+		fmt.Errorf("Product has been sold")
+	}
 
 	txTimeAsPtr, err := t.GetTxTimestampChannel(ctx)
 	if err != nil {

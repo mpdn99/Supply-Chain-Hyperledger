@@ -1,7 +1,6 @@
 ﻿import { Layout, Button, Avatar, Dropdown, MenuProps } from 'antd';
 import Logo from '../assets/logo2.jpg'
 import { UserOutlined } from '@ant-design/icons';
-import SabecoLogo from '../assets/sabeco.jpg'
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '../App';
@@ -59,7 +58,7 @@ const PageHeader = () => {
                 utils.token ? (
                     <>
                         <Dropdown menu={{ items, onClick }} placement="bottomRight">
-                            <Avatar src={SabecoLogo} style={{ float: 'right', marginTop: '8px' }} shape="square" size={48} icon={<UserOutlined />} />
+                            <Avatar style={{ float: 'right', marginTop: '8px' }}size={48} icon={<UserOutlined />} />
                         </Dropdown>
                         <span style={{ float: 'right', marginRight: '10px', color: '#fff' }}>{ utils.token.Name }</span>
                     </>
