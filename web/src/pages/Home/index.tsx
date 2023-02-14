@@ -54,25 +54,29 @@ const Home: React.FC = () => {
     if(data.Position[0]?.Date){
       setItem((prev:any) => getUniqueListBy([...(prev || []), {
         color: 'green',
-        children: `Product was manufactured at ${data.Position[0]?.Organization} ${data.Position[0]?.Date}`
+        label: data.Position[0]?.Date,
+        children: `Product was manufactured at ${data.Position[0]?.Organization}`
       }], "color"))
     }
     if(data.Position[1]?.Date){
       setItem((prev:any) => getUniqueListBy([...(prev || []), {
         color: 'yellow',
-        children: `Product was transfered to ${data.Position[1]?.Organization} ${data.Position[1]?.Date}`
+        label: data.Position[1]?.Date,
+        children: `Product was transfered to ${data.Position[1]?.Organization}`
       }], "color"))
     }
     if(data.Position[2]?.Date){
       setItem((prev:any) => getUniqueListBy([...(prev || []), {
         color: 'blue',
-        children: `Product was transfered to ${data.Position[2]?.Organization} ${data.Position[2]?.Date}`
+        label: data.Position[2]?.Date,
+        children: `Product was transfered to ${data.Position[2]?.Organization}`
       }], "color"))
     }
     if(data.Position[3]?.Date){
       setItem((prev:any) => getUniqueListBy([...(prev || []), {
         color: 'gray',
-        children: `Product was sold at ${data.Position[2]?.Organization} ${data.Position[3]?.Date}`
+        label: data.Position[3]?.Date,
+        children: `Product was sold at ${data.Position[2]?.Organization}`
       }], "color"))
     }
   }
@@ -108,8 +112,8 @@ const Home: React.FC = () => {
                   {productResponse.Status}
                 </span>
               </p><p>
-                <span className='productTxt'>Tracking Proceess</span>
-              </p><Timeline style={{ margin: '20px 30px 20px 30px' }} items={item}>
+                <span className='productTxt'>Tracking Proceess:</span>
+              </p><Timeline style={{ margin: '20px 30px 20px 30px' }} items={item} mode="left">
               </Timeline>
             </>
           ) :

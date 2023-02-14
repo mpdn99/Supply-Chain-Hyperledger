@@ -37,6 +37,18 @@ const PageHeader = () => {
         navigate("/login")
     }
 
+    const handleUserView = () => {
+        if(utils.token.Organization == "ManufacturerOrg"){
+            navigate("/product-management")
+        }
+        if(utils.token.Organization == "DistributorOrg"){
+            navigate("/product-confirmation")
+        }
+        if(utils.token.Organization == "RetailerOrg"){
+            navigate("/saler-management")
+        }
+    }
+
     useEffect(() => {
         console.log(utils.token)
     }, [])
@@ -56,12 +68,12 @@ const PageHeader = () => {
             </div>
             {
                 utils.token ? (
-                    <>
+                    <view onClick={handleUserView}>
                         <Dropdown menu={{ items, onClick }} placement="bottomRight">
                             <Avatar style={{ float: 'right', marginTop: '8px' }}size={48} icon={<UserOutlined />} />
                         </Dropdown>
                         <span style={{ float: 'right', marginRight: '10px', color: '#fff' }}>{ utils.token.Name }</span>
-                    </>
+                    </view>
                 ) : (
                     <Button style={{ float: 'right', margin: '16px 0px 0px 0px' }} id="loginBtn" type="primary" onClick={handleLoginBtn}>Login</Button>
                 )
