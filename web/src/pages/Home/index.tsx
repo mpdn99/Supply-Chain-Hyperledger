@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Input, Timeline } from 'antd';
 import "./index.css"
 import PageHeader from '../../components/PageHeader';
@@ -28,6 +28,7 @@ interface positionItemProps {
 const Home: React.FC = () => {
   const [productResponse, setProductResponse] = useState<productResponseItemProps | null>();
   const [err, setErr] = useState('');
+  const [item, setItem] = useState<any>([]);
 
   const queryProduct = (productId: string) => {
     fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=queryProduct&args=${productId}`, {
@@ -38,8 +39,42 @@ const Home: React.FC = () => {
       }
     })
       .then(respose => respose.json())
-      .then(data => setProductResponse(data))
+      .then(data => {
+        setProductResponse(data)
+        checkItem(data)
+      })
       .catch(() => setErr(productId))
+  }
+
+  const getUniqueListBy = (arr:any, key:any) => {
+    return [...new Map(arr.map((item:any) => [item[key], item])).values()]
+  }
+
+  const checkItem = (data: any) => {
+    if(data.Position[0]?.Date){
+      setItem((prev:any) => getUniqueListBy([...(prev || []), {
+        color: 'green',
+        children: `Product was manufactured at ${data.Position[0]?.Organization} ${data.Position[0]?.Date}`
+      }], "color"))
+    }
+    if(data.Position[1]?.Date){
+      setItem((prev:any) => getUniqueListBy([...(prev || []), {
+        color: 'yellow',
+        children: `Product was transfered to ${data.Position[1]?.Organization} ${data.Position[1]?.Date}`
+      }], "color"))
+    }
+    if(data.Position[2]?.Date){
+      setItem((prev:any) => getUniqueListBy([...(prev || []), {
+        color: 'blue',
+        children: `Product was transfered to ${data.Position[2]?.Organization} ${data.Position[2]?.Date}`
+      }], "color"))
+    }
+    if(data.Position[3]?.Date){
+      setItem((prev:any) => getUniqueListBy([...(prev || []), {
+        color: 'gray',
+        children: `Product was sold at ${data.Position[2]?.Organization} ${data.Position[3]?.Date}`
+      }], "color"))
+    }
   }
 
   return (
@@ -74,24 +109,7 @@ const Home: React.FC = () => {
                 </span>
               </p><p>
                 <span className='productTxt'>Tracking Proceess</span>
-              </p><Timeline style={{ margin: '20px 30px 20px 30px' }} items={[
-                {
-                  color: 'green',
-                  children: `Product was manufactured at ${productResponse.Position[0]?.Organization} ${productResponse.Position[0]?.Date}`
-                },
-                {
-                  color: 'yellow',
-                  children: `Product was transfered to ${productResponse.Position[1]?.Organization} ${productResponse.Position[1]?.Date}`
-                },
-                {
-                  color: 'blue',
-                  children: `Product was transfered to ${productResponse.Position[2]?.Organization} ${productResponse.Position[2]?.Date}`
-                },
-                {
-                  color: 'gray',
-                  children: `Product was sold at ${productResponse.Position[2]?.Organization} ${productResponse.Position[3]?.Date}`
-                }
-              ]}>
+              </p><Timeline style={{ margin: '20px 30px 20px 30px' }} items={item}>
               </Timeline>
             </>
           ) :

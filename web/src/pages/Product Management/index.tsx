@@ -56,13 +56,13 @@ const ProductManagement: React.FC = () => {
 
   const columns: ColumnsType<productResponseItemProps> = [
     { title: 'ProductId', dataIndex: 'ProductId', key: 'ProductId' },
-    { title: 'Name', dataIndex: 'Name', key: 'ProductId' },
-    { title: 'Manufacturer', dataIndex: 'Manufacturer', key: 'ProductId' },
-    { title: 'Distributor', dataIndex: 'Distributor', key: 'ProductId' },
-    { title: 'Retailer', dataIndex: 'Retailer', key: 'ProductId' },
-    { title: 'Customer', dataIndex: 'Consumer', key: 'ProductId' },
-    { title: 'Status', dataIndex: 'Status', key: 'ProductId' },
-    { title: 'Price', dataIndex: 'Price', key: 'ProductId' },
+    { title: 'Name', dataIndex: 'Name', key: 'Name' },
+    { title: 'Manufacturer', dataIndex: 'Manufacturer', key: 'Manufacturer' },
+    { title: 'Distributor', dataIndex: 'Distributor', key: 'Distributor' },
+    { title: 'Retailer', dataIndex: 'Retailer', key: 'Retailer' },
+    { title: 'Customer', dataIndex: 'Consumer', key: 'Customer' },
+    { title: 'Status', dataIndex: 'Status', key: 'Status' },
+    { title: 'Price', dataIndex: 'Price', key: 'Price' },
     {
       title: 'Action', key: 'Operation', render: (_, product) => {
         if (!product.Distributor) {

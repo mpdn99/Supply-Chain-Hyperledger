@@ -84,7 +84,7 @@ func (t *Supplychain) GetTxTimestampChannel(ctx contractapi.TransactionContextIn
 	if err != nil {
 		return "Error", err
 	}
-	timeStr := time.Unix(txTimeAsPtr.Seconds, int64(txTimeAsPtr.Nanos)).String()
+	timeStr := time.Unix(txTimeAsPtr.Seconds, 0).String()
 
 	return timeStr, nil
 }
