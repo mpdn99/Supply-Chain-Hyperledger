@@ -33,7 +33,7 @@ const SalerConfirmation: React.FC = () => {
   const navigate = useNavigate();
 
   const [productResponse, setProductResponse] = useState<productResponseItemProps[]>([]);
-  const [err, setErr] = useState<string|null>(null);
+  const [err, setErr] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [openModal2, setOpenModal2] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -50,7 +50,7 @@ const SalerConfirmation: React.FC = () => {
     })
       .then(respose => respose.json())
       .then(data => data.filter((item: any) => {
-        return item.Retailer == "SieuThiBigC"
+        return item.Retailer === "SieuThiBigC"
       }))
       .then(products => {
         setProductResponse(products)
@@ -111,7 +111,7 @@ const SalerConfirmation: React.FC = () => {
       .validateFields()
       .then((values) => {
         form2.resetFields();
-        if (values.retailerId != (productResponse.find((item) => { return item.ProductId == values.productId }))?.Retailer) {
+        if (values.retailerId !== (productResponse.find((item) => { return item.ProductId === values.productId }))?.Retailer) {
           setErr("Can not update product!")
           console.log("ddd")
         } else {
@@ -142,7 +142,7 @@ const SalerConfirmation: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!utils.token || utils.token.Organization != "RetailerOrg") {
+    if (!utils.token || utils.token.Organization !== "RetailerOrg") {
       navigate("/login")
     } else {
       queryAllProduct();
@@ -155,7 +155,7 @@ const SalerConfirmation: React.FC = () => {
       <Content className="site-layout" style={{ padding: '0 50px' }}>
         <h1>SALER MANAGEMENT</h1>
         {
-          err ? <p style={{ color: 'red' }}>{ err }</p> : null
+          err ? <p style={{ color: 'red' }}>{err}</p> : null
         }
         <Button style={{ margin: '16px 8px 16px 8px' }} id="addProductBtn" type="primary" onClick={confirmBtnHandler}>Confirm new Product</Button>
         <Button style={{ margin: '16px 8px 16px 8px' }} id="sellProductBtn" type="primary" onClick={sellBtnHandler}>Sell Product</Button>

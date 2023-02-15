@@ -48,7 +48,7 @@ const DeliverConfirmation: React.FC = () => {
     })
       .then(respose => respose.json())
       .then(data => data.filter((item: any) => {
-        return item.Distributor == "GiaoHangTietKiem"
+        return item.Distributor === "GiaoHangTietKiem"
       }))
       .then(products => setProductResponse(products))
       .catch(() => setErr(true))
@@ -98,7 +98,7 @@ const DeliverConfirmation: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!utils.token || utils.token.Organization != "DistributorOrg") {
+    if (!utils.token || utils.token.Organization !== "DistributorOrg") {
       navigate("/login")
     } else {
       queryAllProduct();

@@ -46,34 +46,34 @@ const Home: React.FC = () => {
       .catch(() => setErr(productId))
   }
 
-  const getUniqueListBy = (arr:any, key:any) => {
-    return [...new Map(arr.map((item:any) => [item[key], item])).values()]
+  const getUniqueListBy = (arr: any, key: any) => {
+    return [...new Map(arr.map((item: any) => [item[key], item])).values()]
   }
 
   const checkItem = (data: any) => {
-    if(data.Position[0]?.Date){
-      setItem((prev:any) => getUniqueListBy([...(prev || []), {
+    if (data.Position[0]?.Date) {
+      setItem((prev: any) => getUniqueListBy([...(prev || []), {
         color: 'green',
         label: data.Position[0]?.Date,
         children: `Product was manufactured at ${data.Position[0]?.Organization}`
       }], "color"))
     }
-    if(data.Position[1]?.Date){
-      setItem((prev:any) => getUniqueListBy([...(prev || []), {
+    if (data.Position[1]?.Date) {
+      setItem((prev: any) => getUniqueListBy([...(prev || []), {
         color: 'yellow',
         label: data.Position[1]?.Date,
         children: `Product was transfered to ${data.Position[1]?.Organization}`
       }], "color"))
     }
-    if(data.Position[2]?.Date){
-      setItem((prev:any) => getUniqueListBy([...(prev || []), {
+    if (data.Position[2]?.Date) {
+      setItem((prev: any) => getUniqueListBy([...(prev || []), {
         color: 'blue',
         label: data.Position[2]?.Date,
         children: `Product was transfered to ${data.Position[2]?.Organization}`
       }], "color"))
     }
-    if(data.Position[3]?.Date){
-      setItem((prev:any) => getUniqueListBy([...(prev || []), {
+    if (data.Position[3]?.Date) {
+      setItem((prev: any) => getUniqueListBy([...(prev || []), {
         color: 'gray',
         label: data.Position[3]?.Date,
         children: `Product was sold at ${data.Position[2]?.Organization}`
