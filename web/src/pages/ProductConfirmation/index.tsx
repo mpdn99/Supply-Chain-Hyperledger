@@ -39,7 +39,7 @@ const DeliverConfirmation: React.FC = () => {
 
 
   const queryAllProduct = () => {
-    fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=queryAllProducts`, {
+    fetch(`https://distributor.ducnghiapham.online/query?channelid=supplychain&chaincodeid=supplychain&function=queryAllProducts`, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -76,7 +76,7 @@ const DeliverConfirmation: React.FC = () => {
       .validateFields()
       .then((values) => {
         form.resetFields();
-        fetch(`http://35.240.163.29:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=sentToDistributor&args=${values.productId}&args=${values.distributorId}&args=${values.longtitude}&args=${values.latitude}`, {
+        fetch(`https://distributor.ducnghiapham.online/invoke?channelid=supplychain&chaincodeid=supplychain&function=sentToDistributor&args=${values.productId}&args=${values.distributorId}&args=${values.longtitude}&args=${values.latitude}`, {
           method: 'POST',
           mode: 'cors',
           headers: {

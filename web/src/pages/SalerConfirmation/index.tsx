@@ -41,7 +41,7 @@ const SalerConfirmation: React.FC = () => {
 
 
   const queryAllProduct = () => {
-    fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=queryAllProducts`, {
+    fetch(`https://retailer.ducnghiapham.online/query?channelid=supplychain&chaincodeid=supplychain&function=queryAllProducts`, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -85,7 +85,7 @@ const SalerConfirmation: React.FC = () => {
       .validateFields()
       .then((values) => {
         form.resetFields();
-        fetch(`http://34.124.168.73:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=sentToRetailer&args=${values.productId}&args=${values.retailerId}&args=${values.longtitude}&args=${values.latitude}`, {
+        fetch(`https://retailer.ducnghiapham.online/invoke?channelid=supplychain&chaincodeid=supplychain&function=sentToRetailer&args=${values.productId}&args=${values.retailerId}&args=${values.longtitude}&args=${values.latitude}`, {
           method: 'POST',
           mode: 'cors',
           headers: {
@@ -115,7 +115,7 @@ const SalerConfirmation: React.FC = () => {
           setErr("Can not update product!")
           console.log("ddd")
         } else {
-          fetch(`http://34.124.168.73:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=sellToConsumer&args=${values.productId}&args=${values.customerId}&args=${values.longtitude}&args=${values.latitude}`, {
+          fetch(`https://retailer.ducnghiapham.online/invoke?channelid=supplychain&chaincodeid=supplychain&function=sellToConsumer&args=${values.productId}&args=${values.customerId}&args=${values.longtitude}&args=${values.latitude}`, {
             method: 'POST',
             mode: 'cors',
             headers: {

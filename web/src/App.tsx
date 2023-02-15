@@ -29,7 +29,7 @@ const App: React.FC<Props> = ({children}) => {
     const [err, setErr] = useState(false);
 
     const handleLogin = (username: any, password: any) => {
-        fetch(`http://34.143.198.108:3000/query?channelid=supplychain&chaincodeid=supplychain&function=signIn&args=${username}&args=${password}`, {
+        fetch(`https://customer.ducnghiapham.online/query?channelid=supplychain&chaincodeid=supplychain&function=signIn&args=${username}&args=${password}`, {
             method: 'GET',
             mode: 'cors',
             headers: {

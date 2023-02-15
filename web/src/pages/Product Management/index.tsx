@@ -42,7 +42,7 @@ const ProductManagement: React.FC = () => {
 
 
   const queryAllProduct = () => {
-    fetch(`http://35.240.137.145:3000/query?channelid=supplychain&chaincodeid=supplychain&function=queryAllProducts`, {
+    fetch(`https://manufacturer.ducnghiapham.online/query?channelid=supplychain&chaincodeid=supplychain&function=queryAllProducts`, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -82,7 +82,7 @@ const ProductManagement: React.FC = () => {
       .validateFields()
       .then((values) => {
         form1.resetFields();
-        fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=updateProduct&args=${values.productId}&args=${values.name}&args=${values.price}`, {
+        fetch(`https://manufacturer.ducnghiapham.online/invoke?channelid=supplychain&chaincodeid=supplychain&function=updateProduct&args=${values.productId}&args=${values.name}&args=${values.price}`, {
           method: 'POST',
           mode: 'cors',
           headers: {
@@ -105,7 +105,7 @@ const ProductManagement: React.FC = () => {
       .validateFields()
       .then((values) => {
         form2.resetFields();
-        fetch(`http://35.240.137.145:3000/invoke?channelid=supplychain&chaincodeid=supplychain&function=createProduct&args=${values.name}&args=${values.manufacturer}&args=${values.longtitude}&args=${values.latitude}&args=${values.price}`, {
+        fetch(`https://manufacturer.ducnghiapham.online/invoke?channelid=supplychain&chaincodeid=supplychain&function=createProduct&args=${values.name}&args=${values.manufacturer}&args=${values.longtitude}&args=${values.latitude}&args=${values.price}`, {
           method: 'POST',
           mode: 'cors',
           headers: {

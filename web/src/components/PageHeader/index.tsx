@@ -1,9 +1,10 @@
 ﻿import { Layout, Button, Avatar, Dropdown, MenuProps } from 'antd';
-import Logo from '../assets/logo2.jpg'
+import Logo from '../../assets/logo2.jpg'
 import { UserOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from 'react';
-import { AuthContext } from '../App';
+import { AuthContext } from '../../App';
+import './index.css'
 const { Header } = Layout;
 
 interface tokenProps {
@@ -45,7 +46,7 @@ const PageHeader = () => {
             navigate("/product-confirmation")
         }
         if(utils.token.Organization == "RetailerOrg"){
-            navigate("/saler-management")
+            navigate("/saler-confirmation")
         }
     }
 
@@ -68,11 +69,11 @@ const PageHeader = () => {
             </div>
             {
                 utils.token ? (
-                    <view onClick={handleUserView}>
+                    <view >
                         <Dropdown menu={{ items, onClick }} placement="bottomRight">
                             <Avatar style={{ float: 'right', marginTop: '8px' }}size={48} icon={<UserOutlined />} />
                         </Dropdown>
-                        <span style={{ float: 'right', marginRight: '10px', color: '#fff' }}>{ utils.token.Name }</span>
+                        <span className='user-view' onClick={handleUserView} style={{ float: 'right', marginRight: '10px' }}>{ utils.token.Name }</span>
                     </view>
                 ) : (
                     <Button style={{ float: 'right', margin: '16px 0px 0px 0px' }} id="loginBtn" type="primary" onClick={handleLoginBtn}>Login</Button>
