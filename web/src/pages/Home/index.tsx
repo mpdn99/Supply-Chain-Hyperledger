@@ -31,6 +31,7 @@ const Home: React.FC = () => {
   const [item, setItem] = useState<any>([]);
 
   const queryProduct = (productId: string) => {
+    setProductResponse(null)
     fetch(`https://customer.ducnghiapham.online/query?channelid=supplychain&chaincodeid=supplychain&function=queryProduct&args=${productId}`, {
       method: 'GET',
       mode: 'cors',
