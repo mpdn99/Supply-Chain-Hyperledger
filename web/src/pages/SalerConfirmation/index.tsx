@@ -54,7 +54,6 @@ const SalerConfirmation: React.FC = () => {
       }))
       .then(products => {
         setProductResponse(products)
-        setErr(null)
       })
       .catch(() => setErr("Can not update product!"))
   }
@@ -113,7 +112,6 @@ const SalerConfirmation: React.FC = () => {
         form2.resetFields();
         if (values.retailerId !== (productResponse.find((item) => { return item.ProductId === values.productId }))?.Retailer) {
           setErr("Can not update product!")
-          console.log("ddd")
         } else {
           fetch(`https://retailer.ducnghiapham.online/invoke?channelid=supplychain&chaincodeid=supplychain&function=sellToConsumer&args=${values.productId}&args=${values.customerId}&args=${values.longtitude}&args=${values.latitude}`, {
             method: 'POST',
@@ -125,7 +123,6 @@ const SalerConfirmation: React.FC = () => {
             .then(respose => respose.json())
             .then(data => {
               setErr(null)
-              console.log(data)
             })
             .catch(() => setErr("Can not update product!"))
         }

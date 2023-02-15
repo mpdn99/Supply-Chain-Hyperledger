@@ -38,11 +38,9 @@ const App: React.FC<Props> = ({children}) => {
         })
             .then(respose => respose.json())
             .then(data => {
-                if (data.error) {
-                    setErr(true)
-                }
                 setToken(data)
             })
+            .catch(() => setErr(true))
     }
 
     const handleLogout = () => {
@@ -52,6 +50,7 @@ const App: React.FC<Props> = ({children}) => {
     const utils:any = {
         token,
         err,
+        setErr,
         handleLogin,
         handleLogout
     }

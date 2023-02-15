@@ -50,7 +50,10 @@ const ProductManagement: React.FC = () => {
       }
     })
       .then(respose => respose.json())
-      .then(data => setProductResponse(data))
+      .then(data => {
+        setErr(false)
+        setProductResponse(data)
+      })
       .catch(() => setErr(true))
   }
 
@@ -90,7 +93,10 @@ const ProductManagement: React.FC = () => {
           }
         })
           .then(respose => respose.text())
-          .then(data => console.log(data))
+          .then(data => {
+            setErr(false)
+            console.log(data)
+          })
           .catch(() => setErr(true))
       })
     setTimeout(() => {

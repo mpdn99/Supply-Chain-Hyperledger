@@ -15,6 +15,7 @@ const Login: React.FC = () => {
     };
 
     useEffect(() => {
+        removeState();
         if (utils.token && utils.token.Organization == "ManufacturerOrg") {
             navigate('/product-management')
         }
@@ -25,6 +26,10 @@ const Login: React.FC = () => {
             navigate('/saler-confirmation')
         }
     }, [utils.token])
+
+    const removeState = () => {
+        utils.setErr(false)
+    }
 
     return (
         <div className='login-view'>
