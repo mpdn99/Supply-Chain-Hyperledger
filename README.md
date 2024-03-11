@@ -5,6 +5,9 @@ Today’s supply chains are global networks that generally include manufacturers
 
 Supply chain solutions built using Blockchain can provide the end-to-end visibility today’s supply chains need to track and trace their entire production process with increased automation efficiency.
 
+![HL drawio](https://github.com/mpdn99/Supply-Chain-Hyperledger/assets/17932234/f4187a5d-0d07-45f2-a819-3e5731656c62)
+
+
 ## Participant(Organization) in this System:
  - Host 1: Manufacturer
  - Host 2: Distributor
