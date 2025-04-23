@@ -32,8 +32,8 @@ All roles interact with a **permissioned blockchain** network powered by **Hyper
 | Layer       | Technology                |
 |-------------|---------------------------|
 | Blockchain  | Hyperledger Fabric v2.x   |
-| Chaincode   | Node.js                   |
-| Backend     | Node.js (Fabric SDK)      |
+| Chaincode   | Golang                    |
+| Backend     | Golang (Fabric SDK)       |
 | Frontend    | React                     |
 | DevOps      | Docker, Docker Compose    |
 
